@@ -7,12 +7,14 @@ import 'package:csv/csv.dart';
 Future<void> main() async {   
     final input = File('C:\\LBE_Flutter\\app_JAR\\app_jar\\assets\\caracteristiques.csv').openRead();
     final fields = await input.transform(utf8.decoder).transform(const CsvToListConverter(fieldDelimiter: ';')).toList();
-    print(fields);
+    stdout.writeln(fields);
     runApp(
-    const MaterialApp(
+    MaterialApp(
       title: 'Plants', // used by the OS task switcher
       home: SafeArea(
-        child: MyScaffold(),
+        child: MyScaffold(
+          plantlist: fields,
+        ),
       ),
     ),
   );
@@ -21,7 +23,6 @@ Future<void> main() async {
 
 class MyAppBar extends StatelessWidget {
   const MyAppBar({required this.title, super.key});
-
   // Fields in a Widget subclass are always marked "final".
   final Widget title;
 
@@ -59,24 +60,18 @@ class MyAppBar extends StatelessWidget {
 }
 
 class MyBody extends StatelessWidget {
-  const MyBody({super.key});
+  const MyBody({required this.plantlist, super.key});
+  final List<List<dynamic>> plantlist;
+  
   @override
   Widget build(BuildContext context) {
     return Container(
         child : Row(
-          children: const [
+          children: [
             Expanded (
-              child: Text(
-                  'vide',
-                  textAlign: TextAlign.center,                        
-                  ),
+              child: Text(plantlist[3][0])
             ),
-            Expanded (
-              child: Text(
-                  'liste de plantes vide',
-                  textAlign: TextAlign.center,                        
-                  ),
-            ),
+            
           ]
         )
       );
@@ -84,7 +79,8 @@ class MyBody extends StatelessWidget {
 }
 
 class MyScaffold extends StatelessWidget {
-  const MyScaffold({super.key});
+  const MyScaffold({required this.plantlist, super.key});
+  final List<List<dynamic>> plantlist;
   @override
   Widget build(BuildContext context) {
     // Material is a conceptual piece
@@ -115,7 +111,9 @@ class MyScaffold extends StatelessWidget {
               },
             ),
           ), */
-          const MyBody()
+          MyBody(
+            plantlist: plantlist
+          )
               ]
             ),
           );
