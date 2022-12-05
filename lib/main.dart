@@ -5,11 +5,11 @@ import 'package:csv/csv.dart';
 
 
 Future<void> main() async {   
-    //récupérer la liste de plantes à partir du fichier CSV
-    final input = File('C:\\LBE_Flutter\\app_JAR\\app_jar\\assets\\caracteristiques.csv').openRead();
-    final fields = await input.transform(utf8.decoder).transform(const CsvToListConverter(fieldDelimiter: ';')).toList();
-    //stdout.writeln(fields);
-    runApp(
+  //récupérer la liste de plantes à partir du fichier CSV
+  final input = File('C:\\LBE_Flutter\\app_JAR\\app_jar\\assets\\caracteristiques.csv').openRead();
+  final fields = await input.transform(utf8.decoder).transform(const CsvToListConverter(fieldDelimiter: ';')).toList();
+  //stdout.writeln(fields);
+  runApp(
     MaterialApp(
       title: 'Plants', // used by the OS task switcher
       home: SafeArea(
@@ -19,7 +19,6 @@ Future<void> main() async {
       ),
     ),
   );
-  
 }
 
 class MyAppBar extends StatelessWidget {
@@ -79,6 +78,40 @@ class MyBody extends StatelessWidget {
   }
 }
 
+class MyTable extends StatelessWidget {
+  const MyTable({required this.plantlist, super.key});
+  final List<List<dynamic>> plantlist;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: DataTable(
+        columns: const <DataColumn>[
+          DataColumn(
+            label: Text('Nom'),
+          ),
+          DataColumn(
+            label: Text('Nom latin'),
+          ),
+        ],
+        rows: List<DataRow>.generate(
+          plantlist.length,
+          (int index) => DataRow(
+            cells: <DataCell>[
+              DataCell(
+                Text(plantlist[index][0])
+              ),
+              DataCell(
+                Text(plantlist[index][2])
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class MyScaffold extends StatelessWidget {
   const MyScaffold({required this.plantlist, super.key});
   final List<List<dynamic>> plantlist;
@@ -98,7 +131,7 @@ class MyScaffold extends StatelessWidget {
             ),
           ),
 
-          MyBody(
+          MyTable(
             plantlist: plantlist
           )
 
