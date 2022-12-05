@@ -58,34 +58,30 @@ class MyAppBar extends StatelessWidget {
   }
 }
 
-/* class MyList extends StatelessWidget async {
-  final input = File('C:\\LBE_Flutter\\app_JAR\\app_jar\\assets\\caracteristiques.csv').openRead();
-  final fields = await input.transform(utf8.decoder).transform(const CsvToListConverter(fieldDelimiter: ';')).toList();
-
-  MyList({super.key, required fields});
-
+class MyBody extends StatelessWidget {
+  const MyBody({super.key});
   @override
   Widget build(BuildContext context) {
-    const title = 'Long List';
-
-    return MaterialApp(
-      title: title,
-      home: Scaffold(
-        body: ListView.builder(
-          itemCount: fields.length,
-          prototypeItem: ListTile(
-            title: Text(fields.first),
-          ),
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(fields[index]),
-            );
-          },
-        ),
-      ),
-    );
+    return Container(
+        child : Row(
+          children: const [
+            Expanded (
+              child: Text(
+                  'vide',
+                  textAlign: TextAlign.center,                        
+                  ),
+            ),
+            Expanded (
+              child: Text(
+                  'liste de plantes vide',
+                  textAlign: TextAlign.center,                        
+                  ),
+            ),
+          ]
+        )
+      );
   }
-} */
+}
 
 class MyScaffold extends StatelessWidget {
   const MyScaffold({super.key});
@@ -119,27 +115,10 @@ class MyScaffold extends StatelessWidget {
               },
             ),
           ), */
-          Expanded(
-            child : Row(
-              children: const [
-                Expanded (
-                  child: Text(
-                      'vide',
-                      textAlign: TextAlign.center,                        
-                      ),
-                ),
-                Expanded (
-                  child: Text(
-                      'liste de plantes vide',
-                      textAlign: TextAlign.center,                        
-                      ),
-                ),
+          const MyBody()
               ]
             ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 }
 
