@@ -7,7 +7,7 @@ import 'package:csv/csv.dart';
 Future<void> main() async {   
     final input = File('C:\\LBE_Flutter\\app_JAR\\app_jar\\assets\\caracteristiques.csv').openRead();
     final fields = await input.transform(utf8.decoder).transform(const CsvToListConverter(fieldDelimiter: ';')).toList();
-    stdout.writeln(fields);
+    //stdout.writeln(fields);
     runApp(
     MaterialApp(
       title: 'Plants', // used by the OS task switcher
@@ -65,16 +65,16 @@ class MyBody extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child : Row(
-          children: [
-            Expanded (
-              child: Text(plantlist[3][0])
-            ),
-            
-          ]
-        )
-      );
+    return Expanded(
+      child : ListView.builder(
+        itemCount: plantlist.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(plantlist[index][0]),
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -83,8 +83,7 @@ class MyScaffold extends StatelessWidget {
   final List<List<dynamic>> plantlist;
   @override
   Widget build(BuildContext context) {
-    // Material is a conceptual piece
-    // of paper on which the UI appears.
+    // Material is a conceptual piece of paper on which the UI appears.
     return Material(
       // Column is a vertical, linear layout.
       child: Column(
@@ -97,26 +96,14 @@ class MyScaffold extends StatelessWidget {
                   .headline6,
             ),
           ),
-          //MyList(            fields: fields),
-/*           Expanded(
-            child: ListView.builder(
-              itemCount: fields.length,
-              prototypeItem: ListTile(
-                title: Text(fields.fisrt),
-              ),
-              itemBuilder: (context, index) {
-                return ListTile (
-                  title: Text (fields[index]),
-                );
-              },
-            ),
-          ), */
+
           MyBody(
             plantlist: plantlist
           )
-              ]
-            ),
-          );
+
+        ]
+      ),
+    );
   }
 }
 
