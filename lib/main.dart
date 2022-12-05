@@ -5,6 +5,7 @@ import 'package:csv/csv.dart';
 
 
 Future<void> main() async {   
+    //récupérer la liste de plantes à partir du fichier CSV
     final input = File('C:\\LBE_Flutter\\app_JAR\\app_jar\\assets\\caracteristiques.csv').openRead();
     final fields = await input.transform(utf8.decoder).transform(const CsvToListConverter(fieldDelimiter: ';')).toList();
     //stdout.writeln(fields);
