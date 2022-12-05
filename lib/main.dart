@@ -71,6 +71,8 @@ class MyBody extends StatelessWidget {
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(plantlist[index][0]),
+            subtitle: Text(plantlist[index][1]),
+            trailing:  Text('${plantlist[index][20]} m'),
           );
         },
       ),
@@ -83,8 +85,8 @@ class MyTable extends StatelessWidget {
   final List<List<dynamic>> plantlist;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
+    return Expanded(
+      //width: double.infinity,
       child: DataTable(
         columns: const <DataColumn>[
           DataColumn(
@@ -131,7 +133,7 @@ class MyScaffold extends StatelessWidget {
             ),
           ),
 
-          MyTable(
+          MyBody(
             plantlist: plantlist
           )
 
