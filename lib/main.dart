@@ -69,10 +69,16 @@ class MyBody extends StatelessWidget {
       child : ListView.builder(
         itemCount: plantlist.length,
         itemBuilder: (context, index) {
+          String trailingText ;
+          if (plantlist[index][20] == '' ) {
+            trailingText = '';
+          } else {
+            trailingText = '${plantlist[index][20]} m';
+            }
           return ListTile(
             title: Text(plantlist[index][0]),
             subtitle: Text(plantlist[index][1]),
-            trailing:  Text('${plantlist[index][20]} m'),
+            trailing:  Text(trailingText),
           );
         },
       ),
