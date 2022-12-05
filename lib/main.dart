@@ -1,17 +1,13 @@
-//import 'dart:convert';
-//import 'dart:io';
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
-//import 'package:csv/csv.dart';
-
-/* Future<List<List<dynamic>>> processCsv() async {
-      //récupère le contenu du fichier CSV et le met dans une liste
-    final input = File('C:\\LBE_Flutter\\app_JAR\\app_jar\\assets\\caracteristiques.csv').openRead();
-    final fields = await input.transform(utf8.decoder).transform(const CsvToListConverter(fieldDelimiter: ';')).toList();
-    return const fields;
-} */
+import 'package:csv/csv.dart';
 
 
 Future<void> main() async {   
+    final input = File('C:\\LBE_Flutter\\app_JAR\\app_jar\\assets\\caracteristiques.csv').openRead();
+    final fields = await input.transform(utf8.decoder).transform(const CsvToListConverter(fieldDelimiter: ';')).toList();
+    print(fields);
     runApp(
     const MaterialApp(
       title: 'Plants', // used by the OS task switcher
