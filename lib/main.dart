@@ -72,20 +72,16 @@ Future<void> main() async {
     @override
     Widget build(BuildContext context) {
       return Drawer(
-          // Add a ListView to the drawer. This ensures the user can scroll
-          // through the options in the drawer if there isn't enough vertical
-          // space to fit everything.
           child: ListView(
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-                child: Text('Menu'),
+              DrawerHeader(
+                decoration: const BoxDecoration(color: Colors.blue,),
+                child: Text('Menu',style: Theme.of(context).textTheme.headline4,),
               ),
               ListTile(title: const Text('Home'),
+                leading: const Icon(Icons.home),
                 onTap: () {
                   Navigator.push(
                     context, 
@@ -94,6 +90,7 @@ Future<void> main() async {
                 },
               ),
               ListTile(title: const Text('Plantes'),
+                leading: const Icon(Icons.local_florist),
                 onTap: () {
                   Navigator.push(
                     context, 
@@ -104,6 +101,7 @@ Future<void> main() async {
                 },
               ),
               ListTile(title: const Text('Zones'),
+                leading: const Icon(Icons.map),
                 onTap: () {
                   Navigator.push(
                     context, 
