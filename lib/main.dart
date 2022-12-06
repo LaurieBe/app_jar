@@ -181,7 +181,9 @@ Future<void> main() async {
 
   */
 
+
 //------------------------Plants page------------------------
+
   class MyPlantPage extends StatelessWidget {
     const MyPlantPage({required this.plantlist, super.key});
     final List<List<dynamic>> plantlist;
@@ -194,6 +196,10 @@ Future<void> main() async {
             child: MyPlantList(plantlist: plantlist),
         ),
         drawer: MyDrawer(plantlist: plantlist),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: const Icon(Icons.add),
+        ),
       );
     }
   }
@@ -223,7 +229,9 @@ Future<void> main() async {
     }
   }
 
+
 //------------------------Areas Page------------------------
+
   class MyAreaPage extends StatelessWidget {
     const MyAreaPage({required this.plantlist, super.key});
     final List<List<dynamic>> plantlist;
