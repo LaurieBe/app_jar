@@ -3,66 +3,72 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:csv/csv.dart';
 
-
 Future<void> main() async {   
   //récupérer la liste de plantes à partir du fichier CSV
-  final input = File('C:\\LBE_Flutter\\app_JAR\\app_jar\\assets\\caracteristiques.csv').openRead();
-  final fields = await input.transform(utf8.decoder).transform(const CsvToListConverter(fieldDelimiter: ';')).toList();
+    final input = File('C:\\LBE_Flutter\\app_JAR\\app_jar\\assets\\caracteristiques.csv').openRead();
+    final fields = await input.transform(utf8.decoder).transform(const CsvToListConverter(fieldDelimiter: ';')).toList();
   //stdout.writeln(fields);
   runApp(
     MaterialApp(
       title: 'Plants', // used by the OS task switcher
-      home: SafeArea(
-        child: MyScaffold(plantlist: fields,),
-      ),
+      home: MyHomePage(plantlist: fields,),
     ),
   );
 }
 
-//------------------------Plants page------------------------
-  class MyScaffold extends StatelessWidget {
-    const MyScaffold({required this.plantlist, super.key});
+  class MyHomePage extends StatelessWidget {
+    const MyHomePage({required this.plantlist, super.key});
     final List<List<dynamic>> plantlist;
     @override
     Widget build(BuildContext context) {
       // Material is a conceptual piece of paper on which the UI appears.
       return Scaffold(
-        appBar: AppBar(title: const Text('Plantes'),),
-        body : Container(
-            child: MyList(plantlist: plantlist),
+        appBar: AppBar(title: const Text('Home'),),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(//PLANTES
+              flex:1,
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(40, 40, 40, 20),
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.local_florist),
+                  onPressed: () {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => MyPlantPage(plantlist: plantlist,))
+                      );
+                  },
+                  label: const Text('PLANTES',textScaleFactor: 1.5,),
+                ),
+              ),
+            ),
+            Expanded(//ZONES
+              flex:1,
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(40, 20, 40, 40),
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.map),
+                  onPressed: () {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => MyAreaPage(plantlist: plantlist,))
+                      );
+                  },
+                  label: const Text('ZONES',textScaleFactor: 1.5,),
+                ),
+              ),
+            ),
+          ],
         ),
-        drawer: const MyDrawer(),
+        drawer: MyDrawer(plantlist: plantlist),
       );
     }
   }
 
-  class MyList extends StatelessWidget {
-    const MyList({required this.plantlist, super.key});
+ class MyDrawer extends StatelessWidget {
+    const MyDrawer({required this.plantlist, super.key});
     final List<List<dynamic>> plantlist;
-    
-    @override
-    Widget build(BuildContext context) {
-      return ListView.builder(
-          itemCount: plantlist.length,
-          itemBuilder: (context, index) {
-            String trailingText ;
-            if (plantlist[index][20] == '' ) {
-              trailingText = '';
-            } else {
-              trailingText = '${plantlist[index][20]} m';
-              }
-            return ListTile(
-              title: Text(plantlist[index][0]),
-              subtitle: Text(plantlist[index][1]),
-              trailing:  Text(trailingText),
-            );
-          },
-      );
-    }
-  }
-
-  class MyDrawer extends StatelessWidget {
-    const MyDrawer({super.key});
     @override
     Widget build(BuildContext context) {
       return Drawer(
@@ -79,22 +85,32 @@ Future<void> main() async {
                 ),
                 child: Text('Menu'),
               ),
-              ListTile(
-                title: const Text('Plantes'),
+              ListTile(title: const Text('Home'),
                 onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => MyHomePage(plantlist: plantlist,))
+                  );
                 },
               ),
-              ListTile(
-                title: const Text('Zones'),
+              ListTile(title: const Text('Plantes'),
                 onTap: () {
-                  // Update the state of the app
-                  // ...
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => MyPlantPage(plantlist: plantlist,))
+                    );
                   // Then close the drawer
-                  Navigator.pop(context);
+                  //Navigator.pop(context);
+                },
+              ),
+              ListTile(title: const Text('Zones'),
+                onTap: () {
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => MyAreaPage(plantlist: plantlist,))
+                    );
+                  // Then close the drawer
+                  //Navigator.pop(context);
                 },
               ),
             ],
@@ -167,4 +183,61 @@ Future<void> main() async {
 
   */
 
-//------------------------Zones Page------------------------
+//------------------------Plants page------------------------
+  class MyPlantPage extends StatelessWidget {
+    const MyPlantPage({required this.plantlist, super.key});
+    final List<List<dynamic>> plantlist;
+    @override
+    Widget build(BuildContext context) {
+      // Material is a conceptual piece of paper on which the UI appears.
+      return Scaffold(
+        appBar: AppBar(title: const Text('Plantes'),),
+        body : Container(
+            child: MyPlantList(plantlist: plantlist),
+        ),
+        drawer: MyDrawer(plantlist: plantlist),
+      );
+    }
+  }
+
+  class MyPlantList extends StatelessWidget {
+    const MyPlantList({required this.plantlist, super.key});
+    final List<List<dynamic>> plantlist;
+    
+    @override
+    Widget build(BuildContext context) {
+      return ListView.builder(
+          itemCount: plantlist.length,
+          itemBuilder: (context, index) {
+            String trailingText ;
+            if (plantlist[index][20] == '' ) {
+              trailingText = '';
+            } else {
+              trailingText = '${plantlist[index][20]} m';
+              }
+            return ListTile(
+              title: Text(plantlist[index][0]),
+              subtitle: Text(plantlist[index][1]),
+              trailing:  Text(trailingText),
+            );
+          },
+      );
+    }
+  }
+
+//------------------------Areas Page------------------------
+  class MyAreaPage extends StatelessWidget {
+    const MyAreaPage({required this.plantlist, super.key});
+    final List<List<dynamic>> plantlist;
+    @override
+    Widget build(BuildContext context) {
+      // Material is a conceptual piece of paper on which the UI appears.
+      return Scaffold(
+        appBar: AppBar(title: const Text('Zones'),),
+        body : Container(
+            child: const Text('liste des zones'),
+        ),
+        drawer: MyDrawer(plantlist: plantlist),
+      );
+    }
+  }
