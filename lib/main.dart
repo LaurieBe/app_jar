@@ -61,12 +61,12 @@ Future<void> main() async {
             ),
           ],
         ),
-        drawer: MyDrawer(plantlist: plantlist),
+        //drawer: MyDrawer(plantlist: plantlist),
       );
     }
   }
 
- class MyDrawer extends StatelessWidget {
+ /*class MyDrawer extends StatelessWidget {
     const MyDrawer({required this.plantlist, super.key});
     final List<List<dynamic>> plantlist;
     @override
@@ -116,6 +116,7 @@ Future<void> main() async {
       );
     }
   }
+  */
 
   /* class MyTable extends StatelessWidget {
     const MyTable({required this.plantlist, super.key});
@@ -192,10 +193,14 @@ Future<void> main() async {
       // Material is a conceptual piece of paper on which the UI appears.
       return Scaffold(
         appBar: AppBar(title: const Text('Plantes'),),
-        body : Container(
-            child: MyPlantList(plantlist: plantlist),
+        //body : Container(child: MyPlantList(plantlist: plantlist),),
+        body: ListView(
+          children: [
+            ListTile(title: Text('header1')),
+
+          ],
         ),
-        drawer: MyDrawer(plantlist: plantlist),
+        //drawer: MyDrawer(plantlist: plantlist),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
           child: const Icon(Icons.add),
@@ -223,12 +228,31 @@ Future<void> main() async {
               title: Text(plantlist[index][0]),
               subtitle: Text(plantlist[index][1]),
               trailing:  Text(trailingText),
+              ...plantlist.map((e) => MyPlantTile(plant:e)),
             );
           },
       );
     }
   }
 
+class MyPlantTile extends StatelessWidget {
+  final Plant plant;
+
+  const MyPlantTile({required this.plant, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(plant.name),
+      onTap: () {
+        Navigator.pushNamed(context, plant.route);
+      },
+    );
+  }
+}
+
+class Plant {
+}
 
 //------------------------Areas Page------------------------
 
@@ -243,7 +267,7 @@ Future<void> main() async {
         body : Container(
             child: const Text('liste des zones'),
         ),
-        drawer: MyDrawer(plantlist: plantlist),
+        //drawer: MyDrawer(plantlist: plantlist),
       );
     }
   }
