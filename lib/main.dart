@@ -36,7 +36,7 @@ Future<void> main() async {
                   onPressed: () {
                     Navigator.push(
                       context, 
-                      MaterialPageRoute(builder: (context) => MyPlantPage(plantlist: plantlist,))
+                      MaterialPageRoute(builder: (context) => MyPlantListPage(plantlist: plantlist,))
                       );
                   },
                   label: const Text('PLANTES',textScaleFactor: 1.5,),
@@ -94,7 +94,7 @@ Future<void> main() async {
                 onTap: () {
                   Navigator.push(
                     context, 
-                    MaterialPageRoute(builder: (context) => MyPlantPage(plantlist: plantlist,))
+                    MaterialPageRoute(builder: (context) => MyPlantListPage(plantlist: plantlist,))
                     );
                   // Then close the drawer
                   //Navigator.pop(context);
@@ -185,21 +185,15 @@ Future<void> main() async {
 
 //------------------------Plants page------------------------
 
-  class MyPlantPage extends StatelessWidget {
-    const MyPlantPage({required this.plantlist, super.key});
+  class MyPlantListPage extends StatelessWidget {
+    const MyPlantListPage({required this.plantlist, super.key});
     final List<List<dynamic>> plantlist;
     @override
     Widget build(BuildContext context) {
       // Material is a conceptual piece of paper on which the UI appears.
       return Scaffold(
         appBar: AppBar(title: const Text('Plantes'),),
-        //body : Container(child: MyPlantList(plantlist: plantlist),),
-        body: ListView(
-          children: [
-            ListTile(title: Text('header1')),
-
-          ],
-        ),
+        body : Container(child: MyPlantList(plantlist: plantlist),),
         //drawer: MyDrawer(plantlist: plantlist),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
@@ -228,30 +222,35 @@ Future<void> main() async {
               title: Text(plantlist[index][0]),
               subtitle: Text(plantlist[index][1]),
               trailing:  Text(trailingText),
-              ...plantlist.map((e) => MyPlantTile(plant:e)),
+              onTap: () {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => MyPlantPage(plantlist: plantlist,))
+                      );
+                  },
+              //...plantlist.map((e) => MyPlantTile(plant:e)),
             );
           },
       );
     }
   }
 
-class MyPlantTile extends StatelessWidget {
-  final Plant plant;
-
-  const MyPlantTile({required this.plant, super.key});
-
+  class MyPlantPage extends StatelessWidget {
+  const MyPlantPage({required this.plantlist, super.key});
+  final List<List<dynamic>> plantlist;
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(plant.name),
-      onTap: () {
-        Navigator.pushNamed(context, plant.route);
-      },
+    // Material is a conceptual piece of paper on which the UI appears.
+    return Scaffold(
+      appBar: AppBar(title: const Text('Plantes'),),
+      body : Container(child: MyPlantList(plantlist: plantlist),),
+      //drawer: MyDrawer(plantlist: plantlist),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
     );
   }
-}
-
-class Plant {
 }
 
 //------------------------Areas Page------------------------
