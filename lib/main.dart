@@ -4,76 +4,98 @@ import 'package:app_jar/plant.dart';
 import 'package:flutter/material.dart';
 import 'package:csv/csv.dart';
 
-Future<void> main() async {   
+Future<void> main() async {
   //récupérer la liste de plantes à partir du fichier CSV
-    final input = File('C:\\LBE_Flutter\\app_JAR\\app_jar\\assets\\caracteristiques.csv').openRead();
-    List<List<dynamic>> fieldsDyn = await input.transform(utf8.decoder).transform(const CsvToListConverter(fieldDelimiter: ';')).toList();
+  final input =
+      File('C:\\LBE_Flutter\\app_JAR\\app_jar\\assets\\caracteristiques.csv')
+          .openRead();
+  List<List<dynamic>> fieldsDyn = await input
+      .transform(utf8.decoder)
+      .transform(const CsvToListConverter(fieldDelimiter: ';'))
+      .toList();
 
-    List <Plant> plantList = [];
-    for (List<dynamic> line in fieldsDyn) {
-      num? size = line[20] is num ? line[20] : null;
-      plantList.add(Plant(name: line[0],size: size?.toDouble(),scientificName: line[1]));
-    }
+  List<Plant> plantList = [];
+  for (List<dynamic> line in fieldsDyn) {
+    num? size = line[20] is num ? line[20] : null;
+    plantList.add(
+        Plant(name: line[0], size: size?.toDouble(), scientificName: line[1]));
+  }
   //stdout.writeln(fields);
   runApp(
     MaterialApp(
       title: 'Plants', // used by the OS task switcher
-      home: MyHomePage(plantList: plantList,),
+      home: MyHomePage(
+        plantList: plantList,
+      ),
     ),
   );
 }
 
-  class MyHomePage extends StatelessWidget {
-    const MyHomePage({required this.plantList, super.key});
-    final List<Plant> plantList;
-    @override
-    Widget build(BuildContext context) {
-      // Material is a conceptual piece of paper on which the UI appears.
-      return Scaffold(
-        appBar: AppBar(title: const Text('Home'),),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(//PLANTES
-              flex:1,
-              child: Container(
-                margin: const EdgeInsets.fromLTRB(40, 40, 40, 20),
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.local_florist),
-                  onPressed: () {
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => MyPlantListPage(plantList: plantList,))
-                      );
-                  },
-                  label: const Text('PLANTES',textScaleFactor: 1.5,),
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({required this.plantList, super.key});
+  final List<Plant> plantList;
+  @override
+  Widget build(BuildContext context) {
+    // Material is a conceptual piece of paper on which the UI appears.
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            //PLANTES
+            flex: 1,
+            child: Container(
+              margin: const EdgeInsets.fromLTRB(40, 40, 40, 20),
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.local_florist),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyPlantListPage(
+                                plantList: plantList,
+                              )));
+                },
+                label: const Text(
+                  'PLANTES',
+                  textScaleFactor: 1.5,
                 ),
               ),
             ),
-            Expanded(//ZONES
-              flex:1,
-              child: Container(
-                margin: const EdgeInsets.fromLTRB(40, 20, 40, 40),
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.map),
-                  onPressed: () {
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => MyAreaPage(plantList: plantList,))
-                      );
-                  },
-                  label: const Text('ZONES',textScaleFactor: 1.5,),
+          ),
+          Expanded(
+            //ZONES
+            flex: 1,
+            child: Container(
+              margin: const EdgeInsets.fromLTRB(40, 20, 40, 40),
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.map),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyAreaPage(
+                                plantList: plantList,
+                              )));
+                },
+                label: const Text(
+                  'ZONES',
+                  textScaleFactor: 1.5,
                 ),
               ),
             ),
-          ],
-        ),
-        //drawer: MyDrawer(plantlist: plantlist),
-      );
-    }
+          ),
+        ],
+      ),
+      //drawer: MyDrawer(plantlist: plantlist),
+    );
   }
+}
 
- /*class MyDrawer extends StatelessWidget {
+/*class MyDrawer extends StatelessWidget {
     const MyDrawer({required this.plantlist, super.key});
     final List<List<dynamic>> plantlist;
     @override
@@ -125,7 +147,7 @@ Future<void> main() async {
   }
   */
 
-  /* class MyTable extends StatelessWidget {
+/* class MyTable extends StatelessWidget {
     const MyTable({required this.plantlist, super.key});
     final List<List<dynamic>> plantlist;
     @override
@@ -149,7 +171,7 @@ Future<void> main() async {
   }
   */
 
-  /* class MyAppBar extends StatelessWidget {
+/* class MyAppBar extends StatelessWidget {
     const MyAppBar({required this.title, super.key});
     // Fields in a Widget subclass are always marked "final".
     final Widget title;
@@ -189,68 +211,77 @@ Future<void> main() async {
 
   */
 
-
 //------------------------Plants page------------------------
 
-  class MyPlantListPage extends StatelessWidget {
-    const MyPlantListPage({required this.plantList, super.key});
-    final List<Plant> plantList;
-    @override
-    Widget build(BuildContext context) {
-      // Material is a conceptual piece of paper on which the UI appears.
-      return Scaffold(
-        appBar: AppBar(title: const Text('Plantes'),),
-        body : Container(child: MyPlantList(plantList: plantList),),
-        //drawer: MyDrawer(plantlist: plantlist),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: const Icon(Icons.add),
-        ),
-      );
-    }
+class MyPlantListPage extends StatelessWidget {
+  const MyPlantListPage({required this.plantList, super.key});
+  final List<Plant> plantList;
+  @override
+  Widget build(BuildContext context) {
+    // Material is a conceptual piece of paper on which the UI appears.
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Plantes'),
+      ),
+      body: Container(
+        child: MyPlantList(plantList: plantList),
+      ),
+      //drawer: MyDrawer(plantlist: plantlist),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
+    );
   }
+}
 
-  class MyPlantList extends StatelessWidget {
-    const MyPlantList({required this.plantList, super.key});
-    final List<Plant> plantList;
-    
-    @override
-    Widget build(BuildContext context) {
-      return ListView.builder(
-          itemCount: plantList.length,
-          itemBuilder: (context, index) {
-            String trailingText ;
-            if (plantList[index].size == null ) {
-              trailingText = '';
-            } else {
-              trailingText = '${plantList[index].size} m';
-              }
-            return ListTile(
-              title: Text(plantList[index].name),
-              subtitle: Text(plantList[index].scientificName ?? ''),
-              trailing:  Text(trailingText),
-              onTap: () {
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => MyPlantPage(plantList: plantList,))
-                      );
-                  },
-              //...plantlist.map((e) => MyPlantTile(plant:e)),
-            );
+class MyPlantList extends StatelessWidget {
+  const MyPlantList({required this.plantList, super.key});
+  final List<Plant> plantList;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: plantList.length,
+      itemBuilder: (context, index) {
+        String trailingText;
+        if (plantList[index].size == null) {
+          trailingText = '';
+        } else {
+          trailingText = '${plantList[index].size} m';
+        }
+        return ListTile(
+          title: Text(plantList[index].name),
+          subtitle: Text(plantList[index].scientificName ?? ''),
+          trailing: Text(trailingText),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MyPlantPage(
+                          plantList: plantList,
+                        )));
           },
-      );
-    }
+          //...plantlist.map((e) => MyPlantTile(plant:e)),
+        );
+      },
+    );
   }
+}
 
-  class MyPlantPage extends StatelessWidget {
+class MyPlantPage extends StatelessWidget {
   const MyPlantPage({required this.plantList, super.key});
   final List<Plant> plantList;
   @override
   Widget build(BuildContext context) {
     // Material is a conceptual piece of paper on which the UI appears.
     return Scaffold(
-      appBar: AppBar(title: const Text('Plantes'),),
-      body : Container(child: MyPlantList(plantList: plantList),),
+      appBar: AppBar(
+        title: const Text('Plantes'),
+      ),
+      body: Container(
+        child: MyPlantList(plantList: plantList),
+      ),
       //drawer: MyDrawer(plantlist: plantlist),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
@@ -262,18 +293,20 @@ Future<void> main() async {
 
 //------------------------Areas Page------------------------
 
-  class MyAreaPage extends StatelessWidget {
-    const MyAreaPage({required this.plantList, super.key});
-    final List<Plant> plantList;
-    @override
-    Widget build(BuildContext context) {
-      // Material is a conceptual piece of paper on which the UI appears.
-      return Scaffold(
-        appBar: AppBar(title: const Text('Zones'),),
-        body : Container(
-            child: const Text('liste des zones'),
-        ),
-        //drawer: MyDrawer(plantlist: plantlist),
-      );
-    }
+class MyAreaPage extends StatelessWidget {
+  const MyAreaPage({required this.plantList, super.key});
+  final List<Plant> plantList;
+  @override
+  Widget build(BuildContext context) {
+    // Material is a conceptual piece of paper on which the UI appears.
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Zones'),
+      ),
+      body: Container(
+        child: const Text('liste des zones'),
+      ),
+      //drawer: MyDrawer(plantlist: plantlist),
+    );
   }
+}
