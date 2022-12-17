@@ -35,11 +35,11 @@ class MyPlantList extends StatelessWidget {
               title: Text(plantList[index].name),
               subtitle: Text(plantList[index].scientificName ?? ''),
               trailing: Text(trailingText),
-              onTap: () {
-                Navigator.push(context,MaterialPageRoute(
-                  builder: (context) => MyPlantPage(plantList: plantList, index:index)
-                ));
-              },
+              // onTap: () {
+              //   Navigator.push(context,MaterialPageRoute(
+              //     builder: (context) => MyPlantPage(plantList: plantList, index:index)
+              //   ));
+              // },
             )
           )
         );
@@ -61,7 +61,7 @@ class _OpenContainerWrapper extends StatelessWidget {
      openBuilder: (context, closedContainer) {
        return MyPlantPage (plantList: plantList, index:index);
      },
-     openColor: theme.errorColor,
+     openColor: theme.cardColor,
      closedShape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0)),),
      closedElevation: 0,
      closedColor: theme.cardColor,
