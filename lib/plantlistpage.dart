@@ -1,7 +1,6 @@
-//------------------------PlantList page------------------------
-
 import 'package:animations/animations.dart';
 import 'package:app_jar/plant.dart';
+import 'package:app_jar/plantpage.dart';
 import 'package:flutter/material.dart';
 
 class MyPlantListPage extends StatelessWidget {
@@ -11,7 +10,7 @@ class MyPlantListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Plantes'),),
-      body: Container(child: MyPlantList(plantList: plantList),),
+      body: MyPlantList(plantList: plantList),
     );
   }
 }
