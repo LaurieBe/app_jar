@@ -15,56 +15,6 @@ class Plant {
 
 }
 
-//------------------------PlantList page------------------------
-
-class MyPlantListPage extends StatelessWidget {
-  const MyPlantListPage({required this.plantList, super.key});
-  final List<Plant> plantList;
-  @override
-  Widget build(BuildContext context) {
-    // Material is a conceptual piece of paper on which the UI appears.
-    return Scaffold(
-      appBar: AppBar(title: const Text('Plantes'),),
-      body: Container(child: MyPlantList(plantList: plantList),),
-      //drawer: MyDrawer(plantlist: plantlist),
-/*    floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
-      ), */
-    );
-  }
-}
-
-class MyPlantList extends StatelessWidget {
-  const MyPlantList({required this.plantList, super.key});
-  final List<Plant> plantList;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: plantList.length,
-      itemBuilder: (context, index) {
-        String trailingText;
-        if (plantList[index].size == null) {
-          trailingText = '';
-        } else {
-          trailingText = '${plantList[index].size} m';
-        }
-        return ListTile(
-          title: Text(plantList[index].name),
-          subtitle: Text(plantList[index].scientificName ?? ''),
-          trailing: Text(trailingText),
-          onTap: () {
-            Navigator.push(context,MaterialPageRoute(
-              builder: (context) => MyPlantPage(plantList: plantList, index:index)));
-          },
-          //...plantlist.map((e) => MyPlantTile(plant:e)),
-        );
-      },
-    );
-  }
-}
-
 //------------------------Plant page------------------------
 
 class MyPlantPage extends StatelessWidget {

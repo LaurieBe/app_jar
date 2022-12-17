@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:app_jar/area.dart';
 import 'package:app_jar/plant.dart';
+import 'package:app_jar/plantlist.dart';
 import 'package:flutter/material.dart';
 import 'package:csv/csv.dart';
 
@@ -67,11 +68,9 @@ class MyHomePage extends StatelessWidget {
                 icon: const Icon(Icons.local_florist),
                 onPressed: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MyPlantListPage(
-                                plantList: plantList,
-                              )));
+                    context,
+                    MaterialPageRoute(builder: (context) => MyPlantListPage(plantList: plantList))
+                  );
                 },
                 label: const Text(
                   'PLANTES',
