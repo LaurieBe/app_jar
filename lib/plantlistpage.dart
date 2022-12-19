@@ -24,25 +24,19 @@ class MyPlantList extends StatelessWidget {
     return ListView.builder(
       itemCount: plantList.length,
       itemBuilder: (context, index) {
-        String trailingText;
-        if (plantList[index].size == null) {trailingText = '';} 
-        else {trailingText = '${plantList[index].size} m';}
-        return Card(
-          child : _OpenContainerWrapper(
+        String sizeAsText;
+        if (plantList[index].size == null) {sizeAsText = '';} 
+        else {sizeAsText = '${plantList[index].size} m';}
+        return  _OpenContainerWrapper(
             plantList: plantList, 
             index: index, 
             closedChild: ListTile(
               title: Text(plantList[index].name),
               subtitle: Text(plantList[index].scientificName ?? ''),
-              trailing: Text(trailingText),
-              // onTap: () {
-              //   Navigator.push(context,MaterialPageRoute(
-              //     builder: (context) => MyPlantPage(plantList: plantList, index:index)
-              //   ));
-              // },
+              trailing: Text(sizeAsText),
             )
           )
-        );
+        ;
       },
     );
   }
@@ -67,9 +61,7 @@ class _OpenContainerWrapper extends StatelessWidget {
      closedColor: theme.cardColor,
      closedBuilder: (context, openContainer) {
        return InkWell(
-         onTap: () {
-           openContainer();
-         },
+         onTap: () {openContainer();},
          child: closedChild,
        );
      },

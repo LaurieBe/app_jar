@@ -19,7 +19,6 @@ Future<void> main() async {
     String? hardiness;
     if (line[7] is num) {hardiness = line[7].toString();} 
     else {hardiness = line[7];}
-
     plantList.add(
       Plant(
         name: line[0], 
@@ -38,6 +37,12 @@ Future<void> main() async {
 
   runApp(
     MaterialApp(
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.green
+          )
+        ),
       title: 'Plants', // used by the OS task switcher
       home: MyHomePage(
         plantList: plantList,
@@ -65,6 +70,10 @@ class MyHomePage extends StatelessWidget {
             child: Container(
               margin: const EdgeInsets.fromLTRB(40, 40, 40, 20),
               child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:Colors.green,
+                  foregroundColor: Colors.white,
+                  ),
                 icon: const Icon(Icons.local_florist),
                 onPressed: () {
                   Navigator.push(

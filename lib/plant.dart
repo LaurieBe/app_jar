@@ -10,5 +10,4 @@ class Plant {
   final String? watering;
   final String? hardiness;
   final String? area;
-
-}
+}     
