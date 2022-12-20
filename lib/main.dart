@@ -83,10 +83,7 @@ class MyHomePage extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => MyPlantListPage(plantList: plantList))
                   );
                 },
-                label: const Text(
-                  'PLANTES',
-                  textScaleFactor: 1.5,
-                ),
+                label: const Text('PLANTES',textScaleFactor: 1.5,),
               ),
             ),
           ),
