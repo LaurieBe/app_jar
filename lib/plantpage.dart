@@ -47,7 +47,8 @@ class MyPlantPage extends StatelessWidget {
           Row(
             children: [
               Column(
-                children: const [
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [  
                   Text('Zone'),
                   Text('Rusticité'),
                   Text('Exposition'),
@@ -57,6 +58,7 @@ class MyPlantPage extends StatelessWidget {
                 ]
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(plantList[index].area ?? ''),
                   Text(plantList[index].hardiness ?? ''),

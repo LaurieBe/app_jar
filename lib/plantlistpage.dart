@@ -11,7 +11,6 @@ class MyPlantListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Plantes'),),
       body: MyPlantList(plantList: plantList),
-
     );
   }
 }
@@ -22,7 +21,7 @@ class MyPlantList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ListView.separated(
       itemCount: plantList.length,
       itemBuilder: (context, index) {
         String sizeAsText;
@@ -39,6 +38,7 @@ class MyPlantList extends StatelessWidget {
           )
         ;
       },
+      separatorBuilder: (BuildContext context, int index) => const Divider(height: 1,),
     );
   }
 }

@@ -41,7 +41,8 @@ Future<void> main() async {
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.green,
-          secondary: Colors.teal
+          secondary: Colors.teal,
+          tertiary: Colors.cyan
           )
         ),
       title: 'Plants', // used by the OS task switcher
