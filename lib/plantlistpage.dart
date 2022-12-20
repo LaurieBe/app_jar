@@ -11,6 +11,7 @@ class MyPlantListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Plantes'),),
       body: MyPlantList(plantList: plantList),
+
     );
   }
 }

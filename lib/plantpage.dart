@@ -8,39 +8,72 @@ class MyPlantPage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+
     String sizeAsText;
     if (plantList[index].size == null) {sizeAsText = '';} 
     else {sizeAsText = '${plantList[index].size} m';}
-    // Material is a conceptual piece of paper on which the UI appears.
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(plantList[index].name),
+    String scientificName = plantList[index].scientificName ?? '-';
+    String type = plantList[index].type ?? '';
+    String name = plantList[index].name;
 
-      ),
-      body: Column(
+    return Card(
+      //margin: const EdgeInsets.all(50.0),
+      child: Column(
         children : [
-          Card(
-            margin: const EdgeInsets.all(10.0),
-            child: ListTile(
-              subtitle: Text(plantList[index].scientificName ?? '') ,
-              title:Text(plantList[index].type ?? ''),
-              trailing: Text(sizeAsText),
+          Card (
+            color: Theme.of(context).colorScheme.secondaryContainer,
+            elevation: 0,
+            margin: const EdgeInsets.all(0.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListTile(
+                  contentPadding: const EdgeInsets.only(bottom: 25.0),
+                  leading: IconButton(
+                    onPressed: (){Navigator.pop(context);}, 
+                    icon: const Icon(Icons.close),
+                    alignment: Alignment.topCenter,
+                  ),
+                  title:Text(name,style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 2.0),),
+                  subtitle: Text(scientificName,style: const TextStyle(fontStyle: FontStyle.italic),),
+                ),//Text(type,),
+              ],
             ),
           ),
-          
           ListTile(
-            title : Text(plantList[index].hardiness ?? ''),
-            subtitle : Text(plantList[index].area ?? ''),
-            leading : Text(plantList[index].watering ?? ''),
-            trailing: Text(plantList[index].ph ?? ''),
+            subtitle: Text(sizeAsText),
+            title: Text(type),
           ),
-          ListTile(
-            title:Text(plantList[index].exposure ?? ''),
-            subtitle:Text(plantList[index].soil ?? '') ,
-          )
-        ]
-        ),
-      
-    );
+          Row(
+            children: [
+              Column(
+                children: const [
+                  Text('Zone'),
+                  Text('Rusticité'),
+                  Text('Exposition'),
+                  Text('Sol'),
+                  Text('Besoins en eau'),
+                  Text('pH'),
+                ]
+              ),
+              Column(
+                children: [
+                  Text(plantList[index].area ?? ''),
+                  Text(plantList[index].hardiness ?? ''),
+                  Text(plantList[index].exposure ?? ''),
+                  Text(plantList[index].soil ?? '') ,
+                  Text(plantList[index].watering ?? ''),
+                  Text(plantList[index].ph ?? ''),
+                ]
+              ),
+            ],
+          ),
+/*           ListTile(
+            title : Text(plantList[index].hardiness ?? ''),
+            leading: const Text('Rusticité'),
+          ), */
+        ]      
+    ),)
+    ;
   }
 }

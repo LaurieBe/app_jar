@@ -39,8 +39,9 @@ Future<void> main() async {
     MaterialApp(
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.green
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.green,
+          secondary: Colors.teal
           )
         ),
       title: 'Plants', // used by the OS task switcher
