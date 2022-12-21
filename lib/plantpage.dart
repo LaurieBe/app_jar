@@ -59,72 +59,74 @@ class MyPlantCaracteristics extends StatelessWidget {
 
     return Column( 
       children : <Widget>[
-        const Text('Description'), 
-        Expanded (
-          child : GridView.count(
-            crossAxisCount: 3,
-            childAspectRatio : 2,
-            children: [
-              CaracteristicsTile(
-                caracName: 'Type',
-                caracValue: type,
-                plantList: plantList,index:index,
-                caracIcon: Icons.category,
-              ),
-              CaracteristicsTile(
-                caracName: 'Taille',
-                caracValue: sizeAsText,
-                plantList: plantList,index:index,
-                caracIcon: Icons.height,
-              ),
-              CaracteristicsTile(
-                caracName: 'Zone',
-                caracValue: plantList[index].area ?? '-',
-                plantList: plantList,index:index,
-                caracIcon: Icons.place,
-              ),
-            ],
+        const ListTile(
+          title: Text('Description'), 
           ),
+        GridView.count(
+          shrinkWrap: true,
+          crossAxisCount: 3,
+          childAspectRatio : 2,
+          children: [
+            CaracteristicsTile(
+              caracName: 'Type',
+              caracValue: type,
+              plantList: plantList,index:index,
+              caracIcon: Icons.category,
+            ),
+            CaracteristicsTile(
+              caracName: 'Taille',
+              caracValue: sizeAsText,
+              plantList: plantList,index:index,
+              caracIcon: Icons.height,
+            ),
+            CaracteristicsTile(
+              caracName: 'Zone',
+              caracValue: plantList[index].area ?? '-',
+              plantList: plantList,index:index,
+              caracIcon: Icons.place,
+            ),
+          ],
         ),
-        Text('Besoins'),
-        Expanded(
-          child: GridView.count(
-            crossAxisCount: 3,
-            childAspectRatio : 2,
-            children: [
-              CaracteristicsTile(
-                caracName: 'Rusticité',
-                caracValue: plantList[index].hardiness ?? '-',
-                plantList: plantList,index:index,
-                caracIcon: Icons.thermostat,
-              ),
-              CaracteristicsTile(
-                caracName: 'Exposition',
-                caracValue: plantList[index].exposure ?? '-',
-                plantList: plantList,index:index,
-                caracIcon: Icons.wb_sunny,
-              ),
-              CaracteristicsTile(
-                caracName: 'Sol',
-                caracValue: plantList[index].soil ?? '-',
-                plantList: plantList,index:index,
-                caracIcon: Icons.public
-              ),
-              CaracteristicsTile(
-                caracName: 'Besoins en eau',
-                caracValue: plantList[index].watering ?? '-',
-                plantList: plantList,index:index,
-                caracIcon: Icons.water_drop
-              ),
-              CaracteristicsTile(
-                caracName: 'pH',
-                caracValue: plantList[index].ph ?? '-',
-                plantList: plantList,index:index,
-                caracIcon: Icons.moving
-              ),
-            ],
-          ),
-        )
+        const ListTile(
+          title: Text('Besoins'),
+        ),
+        GridView.count(
+          shrinkWrap: true,
+          crossAxisCount: 3,
+          childAspectRatio : 2,
+          children: [
+            CaracteristicsTile(
+              caracName: 'Rusticité',
+              caracValue: plantList[index].hardiness ?? '-',
+              plantList: plantList,index:index,
+              caracIcon: Icons.thermostat,
+            ),
+            CaracteristicsTile(
+              caracName: 'Exposition',
+              caracValue: plantList[index].exposure ?? '-',
+              plantList: plantList,index:index,
+              caracIcon: Icons.wb_sunny,
+            ),
+            CaracteristicsTile(
+              caracName: 'Sol',
+              caracValue: plantList[index].soil ?? '-',
+              plantList: plantList,index:index,
+              caracIcon: Icons.public
+            ),
+            CaracteristicsTile(
+              caracName: 'Besoins en eau',
+              caracValue: plantList[index].watering ?? '-',
+              plantList: plantList,index:index,
+              caracIcon: Icons.water_drop
+            ),
+            CaracteristicsTile(
+              caracName: 'pH',
+              caracValue: plantList[index].ph ?? '-',
+              plantList: plantList,index:index,
+              caracIcon: Icons.moving
+            ),
+          ],
+        ),
       ]
     );
   }
