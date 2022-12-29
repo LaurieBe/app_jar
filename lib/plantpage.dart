@@ -10,13 +10,21 @@ class MyPlantPage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-
     String scientificName = plantList[index].scientificName ?? '-';
     String name = plantList[index].name;
 
-    return Column (
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: (){Navigator.pop(context);}, 
+          icon: const Icon(Icons.close),
+          alignment: Alignment.topCenter,
+        ),
+        title: Text(name),),
+      
+      body: Column(
       children: [
-        //Heading
+        /* //Heading
         Card (
           color: Theme.of(context).colorScheme.secondaryContainer,
           elevation: 0,
@@ -31,15 +39,16 @@ class MyPlantPage extends StatelessWidget {
                   icon: const Icon(Icons.close),
                   alignment: Alignment.topCenter,
                 ),
-                title:Text(name,style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 2.0),),
+                title:,
                 subtitle: Text(scientificName,style: const TextStyle(fontStyle: FontStyle.italic),),
               ),//Text(type,),
             ],
           ),
-        ), 
+        ),  */
         //body
         Expanded(child: MyPlantCaracteristics (plantList: plantList,index:index),),
       ]      
+    )
     );
   }
 }
@@ -56,13 +65,25 @@ class MyPlantCaracteristics extends StatelessWidget {
     if (plantList[index].size == null) {sizeAsText = '-';} 
     else {sizeAsText = '${plantList[index].size} m';}
     String type = plantList[index].type ?? '-';
+    String scientificName = plantList[index].scientificName ?? '-';
+    int nbColumn;
+    if (MediaQuery.of(context).size.width < 600) {
+      nbColumn = 2;
+    } else {
+      if (MediaQuery.of(context).size.width < 1200) {
+      nbColumn = 3;
+    } else {
+      nbColumn = 4;
+    }
+    }
 
     return ListView( 
       children : <Widget>[
+        ListTile(title: Text(scientificName ,style: const TextStyle(fontStyle: FontStyle.italic),),),
         const ListTile(title: Text('Description'), ),
         GridView.count(
           shrinkWrap: true,
-          crossAxisCount: 3,
+          crossAxisCount: nbColumn,
           childAspectRatio : 2,
           children: [
             CaracteristicsTile(
@@ -88,7 +109,7 @@ class MyPlantCaracteristics extends StatelessWidget {
         const ListTile(title: Text('Besoins'),),
         GridView.count(
           shrinkWrap: true,
-          crossAxisCount: 3,
+          crossAxisCount: nbColumn,
           childAspectRatio : 2,
           children: [
             CaracteristicsTile(
@@ -135,9 +156,11 @@ class CaracteristicsTile extends StatelessWidget {
   final String caracName;
   final String caracValue;
   final IconData caracIcon ;
-
+   
   @override
   Widget build(BuildContext context) {
+    TextStyle? adaptedSize; if (MediaQuery.of(context).size.width > 600) {adaptedSize = Theme.of(context).textTheme.titleLarge;} else {adaptedSize = Theme.of(context).textTheme.titleSmall;}
+
     return Card(
       child: Row(
         children: [
@@ -156,7 +179,7 @@ class CaracteristicsTile extends StatelessWidget {
                 ),
                 Text(
                   caracValue,
-                  style:  Theme.of(context).textTheme.headline5)
+                  style:  adaptedSize)
               ],
             ),
           ),

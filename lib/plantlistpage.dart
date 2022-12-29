@@ -11,6 +11,13 @@ class MyPlantListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Plantes'),),
       body: MyPlantList(plantList: plantList),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(
+          Icons.file_upload,
+          semanticLabel: 'Pick a file',
+        ),
+      ),
     );
   }
 }

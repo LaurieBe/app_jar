@@ -15,12 +15,38 @@ Future<void> main() async {
     MaterialApp(
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.green,
-          secondary: Colors.teal,
-          tertiary: Colors.cyan
-          )
-        ),
+        colorScheme : const ColorScheme(
+          brightness: Brightness.light,
+            primary: Color(0xFF476800),
+            onPrimary: Color(0xFFFFFFFF),
+            primaryContainer: Color(0xFFC3F275),
+            onPrimaryContainer: Color(0xFF121F00),
+            secondary: Color(0xFF596248),
+            onSecondary: Color(0xFFFFFFFF),
+            secondaryContainer: Color(0xFFDDE6C6),
+            onSecondaryContainer: Color(0xFF171E0A),
+            tertiary: Color(0xFF396661),
+            onTertiary: Color(0xFFFFFFFF),
+            tertiaryContainer: Color(0xFFBCECE5),
+            onTertiaryContainer: Color(0xFF00201D),
+            error: Color(0xFFBA1A1A),
+            errorContainer: Color(0xFFFFDAD6),
+            onError: Color(0xFFFFFFFF),
+            onErrorContainer: Color(0xFF410002),
+            background: Color(0xFFFEFCF4),
+            onBackground: Color(0xFF1B1C18),
+            surface: Color(0xFFFEFCF4),
+            onSurface: Color(0xFF1B1C18),
+            surfaceVariant: Color(0xFFE2E4D4),
+            onSurfaceVariant: Color(0xFF45483D),
+            outline: Color(0xFF75786C),
+            onInverseSurface: Color(0xFFF2F1E9),
+            inverseSurface: Color(0xFF30312C),
+            inversePrimary: Color(0xFFA8D55C),
+            shadow: Color(0xFF000000),
+            surfaceTint: Color(0xFF476800),
+        )
+      ),
       title: 'Home', // used by the OS task switcher
       home: PickAFilePage(),
     ),
@@ -77,8 +103,6 @@ class PickAFilePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Accueil'),),
       floatingActionButton: FloatingActionButton(
-        backgroundColor:Colors.green,
-        foregroundColor: Colors.white,
         onPressed: () {_pickFile() ;},
         child: const Icon(
           Icons.file_upload,
@@ -94,14 +118,8 @@ class PickAFilePage extends StatelessWidget {
             child: Container(
               margin: const EdgeInsets.fromLTRB(40, 40, 40, 20),
               child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(backgroundColor:Colors.green,foregroundColor: Colors.white,),
                 icon: const Icon(Icons.local_florist),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyPlantListPage(plantList: plantList))
-                  );
-                },
+                onPressed: () {Navigator.push(context,MaterialPageRoute(builder: (context) => MyPlantListPage(plantList: plantList)));},
                 label: const Text('PLANTES',textScaleFactor: 1.5,),
               ),
             ),
@@ -113,9 +131,7 @@ class PickAFilePage extends StatelessWidget {
               margin: const EdgeInsets.fromLTRB(40, 20, 40, 40),
               child: ElevatedButton.icon(
                 icon: const Icon(Icons.map),
-                onPressed: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (context) => MyAreaPage(plantList: plantList,)));
-                },
+                onPressed: () {Navigator.push(context,MaterialPageRoute(builder: (context) => MyAreaPage(plantList: plantList,)));},
                 label: const Text('ZONES',textScaleFactor: 1.5,
                 ),
               ),
