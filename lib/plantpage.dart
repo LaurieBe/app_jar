@@ -57,11 +57,9 @@ class MyPlantCaracteristics extends StatelessWidget {
     else {sizeAsText = '${plantList[index].size} m';}
     String type = plantList[index].type ?? '-';
 
-    return Column( 
+    return ListView( 
       children : <Widget>[
-        const ListTile(
-          title: Text('Description'), 
-          ),
+        const ListTile(title: Text('Description'), ),
         GridView.count(
           shrinkWrap: true,
           crossAxisCount: 3,
@@ -87,9 +85,7 @@ class MyPlantCaracteristics extends StatelessWidget {
             ),
           ],
         ),
-        const ListTile(
-          title: Text('Besoins'),
-        ),
+        const ListTile(title: Text('Besoins'),),
         GridView.count(
           shrinkWrap: true,
           crossAxisCount: 3,

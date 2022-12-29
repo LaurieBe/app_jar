@@ -13,8 +13,8 @@ class MyAreaPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Zones'),
       ),
-      body: Container(
-        child: const Text('liste des zones'),
+      body: const ListTile(
+        title: Text('liste des zones'),
       ),
     );
   }
