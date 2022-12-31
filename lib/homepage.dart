@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io'; // /!\ unsupported by web app
 import 'package:app_jar/area.dart';
 import 'package:app_jar/plant.dart';
@@ -16,13 +17,14 @@ class HomePage extends StatelessWidget {
   //récupérer la liste de plantes à partir du fichier CSV
   void _pickFile() async {  
     // opens storage to pick files and the picked file or files
-    // are assigned into result and if no file is chosen result is null.
+    // are assigned into filePicked and if no file is chosen filePicked is null.
     final filePicked = await FilePicker.platform.pickFiles(allowMultiple: false);
     // if no file is picked
-    if (filePicked == null) {return;} else {
+    if (filePicked == null) {return log('no file chosen');} else {
       final path = filePicked.files.first.path;
+      log('path : $path');
       if (path == null) {
-        return;
+        return log('no path given');
       } else {
         final input = File(path).openRead();
         List<List<dynamic>> fieldsDyn = await input.transform(utf8.decoder).transform(const CsvToListConverter(fieldDelimiter: ';')).toList();
@@ -48,7 +50,7 @@ class HomePage extends StatelessWidget {
             area: line[38],
           ));
         }
-      }
+      log('Plant list ok !');}
     }
   }
 
