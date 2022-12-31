@@ -13,10 +13,7 @@ class MyPlantListPage extends StatelessWidget {
       body: MyPlantList(plantList: plantList),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: const Icon(
-          Icons.file_upload,
-          semanticLabel: 'Pick a file',
-        ),
+        child: const Icon(Icons.file_upload,semanticLabel: 'Pick a file',),
       ),
     );
   }
