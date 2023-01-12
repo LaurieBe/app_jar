@@ -22,6 +22,7 @@ class HomePage extends StatelessWidget {
     log('Build screen');
 
     return Consumer<AppModel>(builder: (context, model, child) {
+      //fonction de récupération du fichier
       void pickFile() async {
         log('starting to pick file...');
         // opens storage to pick files and the picked file or files
@@ -79,33 +80,29 @@ class HomePage extends StatelessWidget {
         }
       }
 
-      Widget w;
+      //vérifier si la liste de plante est présente
       if (model.plantList.isNotEmpty) {
         log('Plant list ok ! first row : ');
         log(model.plantList[0].name);
-        w = Container();
       } else {
         log('il faut charger la plantlist');
-        w = IconButton(
-          onPressed: () {
-            pickFile();
-          },
-          icon: const Icon(
-            Icons.file_upload,
-            semanticLabel: 'Pick a file',
-          ),
-        );
-        //Row(children : const [SizedBox(width: 59,height: 59,child:CircularProgressIndicator())]);
+        pickFile();
       }
 
       return Scaffold(
         appBar: AppBar(
           title: const Text('Accueil'),
+          actions : <Widget>[
+            TextButton.icon(
+              onPressed: () {pickFile();},
+              icon: const Icon(Icons.file_upload),
+              label: const Text('Pick a file'),
+            ),
+          ],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            w,
             //PLANTES
             Expanded(
               flex: 1,
