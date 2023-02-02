@@ -72,10 +72,26 @@ class HomePage extends StatelessWidget {
                 hardiness: hardiness,
                 type: line[8],
                 area: line[38],
+                color: line[9],
+                flowerBegin: line[10],
+                flowerEnd: line[11],
+                fruitEnd: line[13],
+                fruitBegin: line[12],
+                leavesEnd: line[15],
+                leavesBegin: line[14],
+                wish: line[16],
+                comment: line[17],
+                persistence: line[19],
+                leavesDescription: line[18],
               ));
             }
             model.notify();
             log('Plant list ok !');
+            const snackBar = SnackBar(
+              content: Text('Liste téléchargée !'),
+            );
+            // ignore: use_build_context_synchronously
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }
         }
       }
@@ -84,6 +100,9 @@ class HomePage extends StatelessWidget {
       if (model.plantList.isNotEmpty) {
         log('Plant list ok ! first row : ');
         log(model.plantList[0].name);
+        log(model.plantList[0].comment ?? '-');
+        log(model.plantList[0].persistence ?? '-');
+        log(model.plantList[0].exposure ?? '-');
       } else {
         log('il faut charger la plantlist');
         pickFile();
@@ -92,21 +111,13 @@ class HomePage extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(
           title: const Text('Accueil'),
-          actions : <Widget>[
+          actions: <Widget>[
             TextButton.icon(
               onPressed: () {
                 pickFile();
-                final snackBar = SnackBar(
-                  content: const Text('Yay! A SnackBar!'),
-                  /* action: SnackBarAction(
-                    label: 'Undo',
-                    onPressed: () {},
-                  ), */
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
               icon: const Icon(Icons.file_upload),
-              label: const Text('Pick a file'),
+              label: const Text('Nouveau Fichier'),
             ),
           ],
         ),
@@ -146,7 +157,7 @@ class HomePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyAreaPage(
-                                  plantList: model.plantList,
+                                  plantList: model.plantList, index: 1,
                                 )));
                   },
                   label: const Text(

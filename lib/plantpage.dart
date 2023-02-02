@@ -1,5 +1,7 @@
 //import 'dart:html';
 
+// ignore_for_file: unused_local_variable
+
 import 'package:app_jar/plant.dart';
 import 'package:flutter/material.dart';
 
@@ -23,33 +25,12 @@ class MyPlantPage extends StatelessWidget {
           ),
           title: Text(name),
         ),
-        body: Column(children: [
-          /* //Heading
-        Card (
-          color: Theme.of(context).colorScheme.secondaryContainer,
-          elevation: 0,
-          margin: const EdgeInsets.all(0.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ListTile(
-                contentPadding: const EdgeInsets.only(bottom: 25.0),
-                leading: IconButton(
-                  onPressed: (){Navigator.pop(context);}, 
-                  icon: const Icon(Icons.close),
-                  alignment: Alignment.topCenter,
-                ),
-                title:,
-                subtitle: Text(scientificName,style: const TextStyle(fontStyle: FontStyle.italic),),
-              ),//Text(type,),
-            ],
-          ),
-        ),  */
-          //body
-          Expanded(
-            child: MyPlantCaracteristics(plantList: plantList, index: index),
-          ),
-        ]));
+        body: Column(
+          children: [Expanded
+              (child: MyPlantCaracteristics(plantList: plantList, index: index),)
+          ]
+        ) 
+    );
   }
 }
 
@@ -61,106 +42,171 @@ class MyPlantCaracteristics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String sizeAsText;
-    if (plantList[index].size == null) {
-      sizeAsText = '-';
-    } else {
-      sizeAsText = '${plantList[index].size} m';
-    }
-    String type = plantList[index].type ?? '-';
-    String scientificName = plantList[index].scientificName ?? '-';
-    int nbColumn;
-    if (MediaQuery.of(context).size.width < 600) {
-      nbColumn = 2;
-    } else {
-      if (MediaQuery.of(context).size.width < 1200) {
-        nbColumn = 3;
+    //preparation contenu
+      String scientificName = plantList[index].scientificName ?? '-';
+      String type = plantList[index].type ?? '-';
+      String sizeAsText;
+      if (plantList[index].size == null) {
+        sizeAsText = '-';
       } else {
-        nbColumn = 4;
+        sizeAsText = '${plantList[index].size} m';
       }
-    }
+      String exposure = plantList[index].exposure ?? '-';
+      String hardiness = plantList[index].hardiness ?? '-';
+      String ph = plantList[index].ph ?? '-';
+      String soil = plantList[index].soil ?? '-';
+      String watering = plantList[index].watering ?? '-';
+      String area = plantList[index].area ?? '-';
+      String color = plantList[index].color ?? '-';
+      String flowerBegin = plantList[index].flowerBegin ?? '-';
+      String flowerEnd = plantList[index].flowerEnd ?? '-';
+      String fruitEnd = plantList[index].fruitEnd ?? '-';
+      String fruitBegin = plantList[index].fruitBegin ?? '-';
+      String leavesEnd = plantList[index].leavesEnd ?? '-';
+      String leavesBegin = plantList[index].leavesBegin ?? '-';
+      String wish = plantList[index].wish ?? '-';
+      String comment = plantList[index].comment ?? '-';
+      String persistence = plantList[index].persistence ?? '-';
+      String leavesDescription = plantList[index].leavesDescription ?? '-';
+      int nbColumn;
+      if (MediaQuery.of(context).size.width < 600) {
+        nbColumn = 1;
+      } else {
+        if (MediaQuery.of(context).size.width < 1200) {
+          nbColumn = 3;
+        } else {
+          nbColumn = 4;
+        }
+      }
 
-    return ListView(children: <Widget>[
-      ListTile(
-        title: Text(
-          scientificName,
-          style: const TextStyle(fontStyle: FontStyle.italic),
-        ),
-      ),
-      const ListTile(
-        title: Text('Description'),
-      ),
-      GridView.count(
-        shrinkWrap: true,
-        crossAxisCount: nbColumn,
-        childAspectRatio: 2,
-        children: [
-          CaracteristicsTile(
-            caracName: 'Type',
-            caracValue: type,
-            plantList: plantList,
-            index: index,
-            caracIcon: Icons.category,
-          ),
-          CaracteristicsTile(
-            caracName: 'Taille',
-            caracValue: sizeAsText,
-            plantList: plantList,
-            index: index,
-            caracIcon: Icons.height,
-          ),
-          CaracteristicsTile(
-            caracName: 'Zone',
-            caracValue: plantList[index].area ?? '-',
-            plantList: plantList,
-            index: index,
-            caracIcon: Icons.place,
-          ),
-        ],
-      ),
-      const ListTile(
-        title: Text('Besoins'),
-      ),
-      GridView.count(
-        shrinkWrap: true,
-        crossAxisCount: nbColumn,
-        childAspectRatio: 2,
-        children: [
-          CaracteristicsTile(
-            caracName: 'Rusticité',
-            caracValue: plantList[index].hardiness ?? '-',
-            plantList: plantList,
-            index: index,
-            caracIcon: Icons.thermostat,
-          ),
-          CaracteristicsTile(
-            caracName: 'Exposition',
-            caracValue: plantList[index].exposure ?? '-',
-            plantList: plantList,
-            index: index,
-            caracIcon: Icons.wb_sunny,
-          ),
-          CaracteristicsTile(
-              caracName: 'Sol',
-              caracValue: plantList[index].soil ?? '-',
-              plantList: plantList,
-              index: index,
-              caracIcon: Icons.public),
-          CaracteristicsTile(
-              caracName: 'Besoins en eau',
-              caracValue: plantList[index].watering ?? '-',
-              plantList: plantList,
-              index: index,
-              caracIcon: Icons.water_drop),
-          CaracteristicsTile(
-              caracName: 'pH',
-              caracValue: plantList[index].ph ?? '-',
-              plantList: plantList,
-              index: index,
-              caracIcon: Icons.moving),
-        ],
-      ),
-    ]);
+
+    //contenu
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverPadding(
+          padding: const EdgeInsets.all(20.0),
+          sliver: SliverList(
+            delegate: SliverChildListDelegate(
+              <Widget>[
+                ListTile(
+                  title: Text(
+                    scientificName,
+                    style: const TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                ),
+                const ListTile(
+                  title: Text('Description'),
+                ),
+                GridView.count(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  crossAxisCount: nbColumn,
+                  childAspectRatio: 4,
+                  children: [
+                    CaracteristicsTile(
+                      caracName: 'Type',
+                      caracValue: type,
+                      plantList: plantList,
+                      index: index,
+                      caracIcon: Icons.category,
+                    ),
+                    CaracteristicsTile(
+                      caracName: 'Taille',
+                      caracValue: sizeAsText,
+                      plantList: plantList,
+                      index: index,
+                      caracIcon: Icons.height,
+                    ),
+                    CaracteristicsTile(
+                      caracName: 'Zone',
+                      caracValue: area,
+                      plantList: plantList,
+                      index: index,
+                      caracIcon: Icons.place,
+                    ),
+                    CaracteristicsTile(
+                      caracName: 'Couleur',
+                      caracValue: color,
+                      plantList: plantList,
+                      index: index,
+                      caracIcon: Icons.category,
+                    ),
+                    CaracteristicsTile(
+                      caracName: 'Feuillage',
+                      caracValue: leavesDescription,
+                      plantList: plantList,
+                      index: index,
+                      caracIcon: Icons.category,
+                    ),
+                    CaracteristicsTile(
+                      caracName: 'Persistance',
+                      caracValue: persistence,
+                      plantList: plantList,
+                      index: index,
+                      caracIcon: Icons.category,
+                    ),
+                    CaracteristicsTile(
+                      caracName: 'Wishlist',
+                      caracValue: wish,
+                      plantList: plantList,
+                      index: index,
+                      caracIcon: Icons.height,
+                    ),
+                  ],
+                ),
+                const ListTile(
+                  title: Text('Besoins'),
+                ),
+                GridView.count(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  crossAxisCount: nbColumn,
+                  childAspectRatio: 4,
+                  children: [
+                    CaracteristicsTile(
+                      caracName: 'Rusticité',
+                      caracValue: hardiness,
+                      plantList: plantList,
+                      index: index,
+                      caracIcon: Icons.thermostat,
+                    ),
+                    CaracteristicsTile(
+                      caracName: 'Exposition',
+                      caracValue: exposure,
+                      plantList: plantList,
+                      index: index,
+                      caracIcon: Icons.wb_sunny,
+                    ),
+                    CaracteristicsTile(
+                        caracName: 'Sol',
+                        caracValue: soil,
+                        plantList: plantList,
+                        index: index,
+                        caracIcon: Icons.public),
+                    CaracteristicsTile(
+                        caracName: 'Besoins en eau',
+                        caracValue: watering,
+                        plantList: plantList,
+                        index: index,
+                        caracIcon: Icons.water_drop),
+                    CaracteristicsTile(
+                        caracName: 'pH',
+                        caracValue: ph,
+                        plantList: plantList,
+                        index: index,
+                        caracIcon: Icons.moving),
+                  ],
+                ),
+                ListTile(
+                  title: const Text('Commentaire'),
+                  subtitle: Text(comment),
+                ),
+              ]
+            )
+          )
+        )
+      ]
+    );
   }
 }
 
