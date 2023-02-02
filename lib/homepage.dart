@@ -94,7 +94,17 @@ class HomePage extends StatelessWidget {
           title: const Text('Accueil'),
           actions : <Widget>[
             TextButton.icon(
-              onPressed: () {pickFile();},
+              onPressed: () {
+                pickFile();
+                final snackBar = SnackBar(
+                  content: const Text('Yay! A SnackBar!'),
+                  /* action: SnackBarAction(
+                    label: 'Undo',
+                    onPressed: () {},
+                  ), */
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
               icon: const Icon(Icons.file_upload),
               label: const Text('Pick a file'),
             ),
