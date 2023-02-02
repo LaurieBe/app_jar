@@ -100,9 +100,7 @@ class HomePage extends StatelessWidget {
       if (model.plantList.isNotEmpty) {
         log('Plant list ok ! first row : ');
         log(model.plantList[0].name);
-        log(model.plantList[0].comment ?? '-');
-        log(model.plantList[0].persistence ?? '-');
-        log(model.plantList[0].exposure ?? '-');
+        log(model.plantList[0].wish ?? 'no wish');
       } else {
         log('il faut charger la plantlist');
         pickFile();
