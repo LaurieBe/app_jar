@@ -14,23 +14,6 @@ class PlantListPage extends StatelessWidget {
         title: const Text('Plantes'),
       ),
       body: MyPlantList(plantList: plantList),
-      //floatingActionButton: DownloadFAB(onPressed: _pickFile)
-    );
-  }
-}
-
-class DownloadFAB extends StatelessWidget {
-  const DownloadFAB({super.key, required this.onPressed});
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: onPressed,
-      child: const Icon(
-        Icons.file_upload,
-        semanticLabel: 'Pick a file',
-      ),
     );
   }
 }
@@ -41,21 +24,23 @@ class MyPlantList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Plant> filteredPlantList = plantList.where((Plant element) {
+      return element.name.toLowerCase().contains('ab');
+    }).toList();
+
     return ListView.separated(
-      itemCount: plantList.length,
+      itemCount: filteredPlantList.length,
       itemBuilder: (context, index) {
         String sizeAsText;
-        if (plantList[index].size == null) {
-          sizeAsText = '';
-        } else {
-          sizeAsText = '${plantList[index].size} m';
-        }
+        filteredPlantList[index].size == null
+            ? sizeAsText = ''
+            : sizeAsText = '${filteredPlantList[index].size} m';
         return _OpenContainerWrapper(
-            plantList: plantList,
+            plantList: filteredPlantList,
             index: index,
             closedChild: ListTile(
-              title: Text(plantList[index].name),
-              subtitle: Text(plantList[index].scientificName ?? ''),
+              title: Text(filteredPlantList[index].name),
+              subtitle: Text(filteredPlantList[index].scientificName ?? ''),
               trailing: Text(sizeAsText),
             ));
       },
