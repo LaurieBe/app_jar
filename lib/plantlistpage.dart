@@ -16,14 +16,6 @@ class PlantListPage extends StatelessWidget {
           title: const Text('Plantes'),
           scrolledUnderElevation: 2,
           shadowColor: Theme.of(context).shadowColor,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search),
-              tooltip: 'Recherche',
-              onPressed: () {
-              },
-            ),
-          ],
         ),
         body: 
           MyPlantList(plantList: plantList),
@@ -103,10 +95,12 @@ class _MyPlantListState extends State<MyPlantList> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TextField(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal:20),
+          child : TextField(
             onChanged: (value) => _runFilter(value),
             decoration: const InputDecoration(
-                labelText: 'Search', suffixIcon: Icon(Icons.search))),
+                labelText: 'Search', suffixIcon: Icon(Icons.search))),),
         Expanded(
           child: filteredPlantList.isNotEmpty
               ? ListView.separated(
@@ -125,8 +119,7 @@ class _MyPlantListState extends State<MyPlantList> {
                           trailing: Text(sizeAsText),
                         ));
                   },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Divider(height: 1,),
+                  separatorBuilder: (BuildContext context, int index) =>const Divider(height: 1,),
                 )
               : const Text(
                   'No results found',
