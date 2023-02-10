@@ -1,25 +1,22 @@
-//import 'dart:html';
-//import 'dart:developer';
-
 import 'package:animations/animations.dart';
 import 'package:app_jar/plant.dart';
 import 'package:app_jar/plantpage.dart';
 import 'package:flutter/material.dart'; // /!\ unsupported by web app
 
 class PlantListPage extends StatelessWidget {
-  const PlantListPage({super.key, required this.plantList});
+  PlantListPage({super.key, required this.plantList});
   final List<Plant> plantList;
+  final name = const Text('Plantes').toString();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Plantes'),
-          scrolledUnderElevation: 2,
-          shadowColor: Theme.of(context).shadowColor,
-        ),
-        body: 
-          MyPlantList(plantList: plantList),
-        );
+      appBar: AppBar(
+        title: const Text('Plantes'),
+        scrolledUnderElevation: 2,
+        shadowColor: Theme.of(context).shadowColor,
+      ),
+      body: MyPlantList(plantList: plantList),
+    );
   }
 }
 
@@ -47,7 +44,9 @@ class _OpenContainerWrapper extends StatelessWidget {
       closedColor: theme.cardColor,
       closedBuilder: (context, openContainer) {
         return InkWell(
-          onTap: () {openContainer();},
+          onTap: () {
+            openContainer();
+          },
           child: closedChild,
         );
       },
@@ -72,7 +71,60 @@ class _MyPlantListState extends State<MyPlantList> {
     super.initState();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ElevatedButton(
+          child: const Text('showModalBottomSheet'),
+          onPressed: () {
+            showModalBottomSheet<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return SearchZone(
+                      filteredPlantList: filteredPlantList,
+                      plantList: plantList);
+                });
+          },
+        ),
+        Expanded(
+          child: filteredPlantList.isNotEmpty
+              ? PlantList(
+                  filteredPlantList: filteredPlantList, plantList: plantList)
+              : const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: Text(
+                    'Pas de résultat',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+class SearchZone extends StatefulWidget {
+  SearchZone(
+      {super.key, required this.plantList, required this.filteredPlantList});
+  final List<Plant> plantList;
+  List<Plant> filteredPlantList = [];
+
+  @override
+  State<SearchZone> createState() => _SearchZoneState(plantList: plantList);
   // This function is called whenever the text field changes
+}
+
+class _SearchZoneState extends State<SearchZone> {
+  _SearchZoneState({required this.plantList});
+  final List<Plant> plantList;
+  List<Plant> filteredPlantList = [];
+  @override
+  initState() {
+    filteredPlantList = plantList;
+    super.initState();
+  }
+
   void _runFilter(String enteredKeyword) {
     List<Plant> results = [];
     if (enteredKeyword.isEmpty) {
@@ -93,40 +145,64 @@ class _MyPlantListState extends State<MyPlantList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal:20),
-          child : TextField(
-            onChanged: (value) => _runFilter(value),
-            decoration: const InputDecoration(
-                labelText: 'Search', suffixIcon: Icon(Icons.search))),),
-        Expanded(
-          child: filteredPlantList.isNotEmpty
-              ? ListView.separated(
-                  itemCount: filteredPlantList.length,
-                  itemBuilder: (context, index) {
-                    String sizeAsText;
-                    filteredPlantList[index].size == null
-                        ? sizeAsText = ''
-                        : sizeAsText = '${filteredPlantList[index].size} m';
-                    return _OpenContainerWrapper(
-                        plantList: filteredPlantList,
-                        index: index,
-                        closedChild: ListTile(
-                          title: Text(filteredPlantList[index].name),
-                          subtitle: Text(filteredPlantList[index].scientificName ?? ''),
-                          trailing: Text(sizeAsText),
-                        ));
-                  },
-                  separatorBuilder: (BuildContext context, int index) =>const Divider(height: 1,),
-                )
-              : const Text(
-                  'No results found',
-                  style: TextStyle(fontSize: 24),
-                ),
-        ),
-      ],
-    );
+    return SizedBox(
+        height: 200,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextField(
+                    onChanged: (value) => _runFilter(value),
+                    decoration: const InputDecoration(
+                        labelText: 'Search', suffixIcon: Icon(Icons.search))),
+              ),
+              const Text('Modal BottomSheet'),
+              ElevatedButton(
+                child: const Text('Close BottomSheet'),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          ),
+        ));
+  }
+}
+
+class PlantList extends StatelessWidget {
+  PlantList(
+      {super.key, required this.plantList, required this.filteredPlantList});
+  final List<Plant> plantList;
+  final List<Plant> filteredPlantList;
+  var scrollController = ScrollController();
+  @override
+  Widget build(BuildContext context) {
+    return Scrollbar(
+        controller: scrollController,
+        child: ListView.separated(
+          controller: scrollController,
+          itemCount: filteredPlantList.length,
+          itemBuilder: (context, index) {
+            String sizeAsText;
+            filteredPlantList[index].size == null
+                ? sizeAsText = ''
+                : sizeAsText = '${filteredPlantList[index].size} m';
+            return _OpenContainerWrapper(
+                plantList: filteredPlantList,
+                index: index,
+                closedChild: ListTile(
+                  title: Text(filteredPlantList[index].name),
+                  subtitle: Text(filteredPlantList[index].scientificName ?? ''),
+                  trailing: Text(sizeAsText),
+                ));
+          },
+          separatorBuilder: (BuildContext context, int index) => Divider(
+            height: 1,
+            color: Theme.of(context).colorScheme.outline.withOpacity(0.4),
+            indent: 5,
+            endIndent: 5,
+          ),
+        ));
   }
 }

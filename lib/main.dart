@@ -45,10 +45,34 @@ Future<void> main() async {
           home: const HomePage(),
         );
       }));
-}  
+}
 
+class MyAppBar extends StatelessWidget {
+  const MyAppBar({super.key, required this.name});
+  final name;
 
-
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      scrolledUnderElevation: 2,
+      shadowColor: Theme.of(context).shadowColor,
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: const Icon(Icons.close),
+      ),
+      pinned: true,
+      expandedHeight: 150.0,
+      flexibleSpace: FlexibleSpaceBar(
+        title: Text(
+          name,
+          style: TextStyle(color: Theme.of(context).colorScheme.primary),
+        ),
+      ),
+    );
+  }
+}
 
 /*
 --------------------------------------------------------------------------------------------------
