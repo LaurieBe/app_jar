@@ -17,6 +17,8 @@ class MyPlantPage extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
+          scrolledUnderElevation: 2,
+          shadowColor: Theme.of(context).shadowColor, 
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -94,9 +96,7 @@ class MyPlantCaracteristics extends StatelessWidget {
                   style: const TextStyle(fontStyle: FontStyle.italic),
                 ),
               ),
-              const ListTile(
-                title: Text('Description'),
-              ),
+              const ListTile(title: Text('Description'),),
               ListView(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -180,9 +180,7 @@ class MyPlantCaracteristics extends StatelessWidget {
                         ),
                 ],
               ),
-              const ListTile(
-                title: Text('Besoins'),
-              ),
+              const ListTile(title: Text('Besoins'),),
               ListView(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -242,9 +240,7 @@ class MyPlantCaracteristics extends StatelessWidget {
                 ],
               ),
               comment == ""
-                  ? const SizedBox(
-                      height: 0,
-                    )
+                  ? const SizedBox(height: 0,)
                   : ListTile(
                       title: const Text('Commentaire'),
                       subtitle: Text(comment),

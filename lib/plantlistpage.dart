@@ -1,8 +1,10 @@
+//import 'dart:html';
+//import 'dart:developer';
+
 import 'package:animations/animations.dart';
 import 'package:app_jar/plant.dart';
 import 'package:app_jar/plantpage.dart';
-import 'package:flutter/material.dart';
-// /!\ unsupported by web app
+import 'package:flutter/material.dart'; // /!\ unsupported by web app
 
 class PlantListPage extends StatelessWidget {
   const PlantListPage({super.key, required this.plantList});
@@ -10,44 +12,22 @@ class PlantListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Plantes'),
-      ),
-      body: MyPlantList(plantList: plantList),
-    );
-  }
-}
-
-class MyPlantList extends StatelessWidget {
-  const MyPlantList({required this.plantList, super.key});
-  final List<Plant> plantList;
-
-  @override
-  Widget build(BuildContext context) {
-    List<Plant> filteredPlantList = plantList.where((Plant element) {
-      return element.name.toLowerCase().contains('ab');
-    }).toList();
-
-    return ListView.separated(
-      itemCount: filteredPlantList.length,
-      itemBuilder: (context, index) {
-        String sizeAsText;
-        filteredPlantList[index].size == null
-            ? sizeAsText = ''
-            : sizeAsText = '${filteredPlantList[index].size} m';
-        return _OpenContainerWrapper(
-            plantList: filteredPlantList,
-            index: index,
-            closedChild: ListTile(
-              title: Text(filteredPlantList[index].name),
-              subtitle: Text(filteredPlantList[index].scientificName ?? ''),
-              trailing: Text(sizeAsText),
-            ));
-      },
-      separatorBuilder: (BuildContext context, int index) => const Divider(
-        height: 1,
-      ),
-    );
+        appBar: AppBar(
+          title: const Text('Plantes'),
+          scrolledUnderElevation: 2,
+          shadowColor: Theme.of(context).shadowColor,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.search),
+              tooltip: 'Recherche',
+              onPressed: () {
+              },
+            ),
+          ],
+        ),
+        body: 
+          MyPlantList(plantList: plantList),
+        );
   }
 }
 
@@ -75,12 +55,85 @@ class _OpenContainerWrapper extends StatelessWidget {
       closedColor: theme.cardColor,
       closedBuilder: (context, openContainer) {
         return InkWell(
-          onTap: () {
-            openContainer();
-          },
+          onTap: () {openContainer();},
           child: closedChild,
         );
       },
+    );
+  }
+}
+
+class MyPlantList extends StatefulWidget {
+  const MyPlantList({required this.plantList, super.key});
+  final List<Plant> plantList;
+  @override
+  State<MyPlantList> createState() => _MyPlantListState(plantList: plantList);
+}
+
+class _MyPlantListState extends State<MyPlantList> {
+  _MyPlantListState({required this.plantList});
+  final List<Plant> plantList;
+  List<Plant> filteredPlantList = [];
+  @override
+  initState() {
+    filteredPlantList = plantList;
+    super.initState();
+  }
+
+  // This function is called whenever the text field changes
+  void _runFilter(String enteredKeyword) {
+    List<Plant> results = [];
+    if (enteredKeyword.isEmpty) {
+      // if the search field is empty or only contains white-space, we'll display all users
+      results = plantList;
+    } else {
+      results = plantList.where((Plant element) {
+        return element.name
+            .toLowerCase()
+            .contains(enteredKeyword.toLowerCase());
+      }).toList();
+    }
+    // Refresh the UI
+    setState(() {
+      filteredPlantList = results;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextField(
+            onChanged: (value) => _runFilter(value),
+            decoration: const InputDecoration(
+                labelText: 'Search', suffixIcon: Icon(Icons.search))),
+        Expanded(
+          child: filteredPlantList.isNotEmpty
+              ? ListView.separated(
+                  itemCount: filteredPlantList.length,
+                  itemBuilder: (context, index) {
+                    String sizeAsText;
+                    filteredPlantList[index].size == null
+                        ? sizeAsText = ''
+                        : sizeAsText = '${filteredPlantList[index].size} m';
+                    return _OpenContainerWrapper(
+                        plantList: filteredPlantList,
+                        index: index,
+                        closedChild: ListTile(
+                          title: Text(filteredPlantList[index].name),
+                          subtitle: Text(filteredPlantList[index].scientificName ?? ''),
+                          trailing: Text(sizeAsText),
+                        ));
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(height: 1,),
+                )
+              : const Text(
+                  'No results found',
+                  style: TextStyle(fontSize: 24),
+                ),
+        ),
+      ],
     );
   }
 }

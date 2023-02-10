@@ -111,9 +111,7 @@ class HomePage extends StatelessWidget {
           title: const Text('Accueil'),
           actions: <Widget>[
             TextButton.icon(
-              onPressed: () {
-                pickFile();
-              },
+              onPressed: () {pickFile();},
               icon: const Icon(Icons.file_upload),
               label: const Text('Nouveau Fichier'),
             ),
@@ -133,8 +131,7 @@ class HomePage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                PlantListPage(plantList: model.plantList)));
+                            builder: (context) =>PlantListPage(plantList: model.plantList)));
                   },
                   label: const Text(
                     'PLANTES',
@@ -155,7 +152,8 @@ class HomePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyAreaPage(
-                                  plantList: model.plantList, index: 1,
+                                  plantList: model.plantList,
+                                  index: 1,
                                 )));
                   },
                   label: const Text(
