@@ -49,7 +49,7 @@ Future<void> main() async {
 
 class MyAppBar extends StatelessWidget {
   const MyAppBar({super.key, required this.name});
-  final name;
+  final dynamic name;
 
   @override
   Widget build(BuildContext context) {
