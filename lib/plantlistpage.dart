@@ -32,38 +32,84 @@ class MyPlantList extends StatefulWidget {
 }
 
 class _MyPlantListState extends State<MyPlantList> {
-  //final List<Plant> plantList;
+  late List<Plant> plantList = [];
   late List<Plant> filteredPlantList;
-  List<Plant> fullPlantList = [];
+  bool favorite = false;
   @override
   initState() {
     filteredPlantList = widget.plantList;
-    //fullPlantList = widget.plantList;
+    plantList = widget.plantList;
     super.initState();
+  }
+
+  void _runFilter(String enteredKeyword) {
+    List<Plant> results = [];
+    if (enteredKeyword.isEmpty) {
+      // if the search field is empty or only contains white-space, we'll display all items
+      results = widget.plantList;
+    } else {
+      results = widget.plantList.where((Plant element) {
+        return element.name
+            .toLowerCase()
+            .contains(enteredKeyword.toLowerCase());
+      }).toList();
+    }
+    // Refresh the UI
+    setState(() {
+      filteredPlantList = results;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    log('building plantlist. first plant in plant list: ');
-    log(filteredPlantList[0].name);
     return Column(
       children: [
-        ElevatedButton(
-          child: const Text('showModalBottomSheet'),
-          onPressed: () {
-            showModalBottomSheet<void>(
-                context: context,
-                builder: (BuildContext context) {
-                  return SearchZone(
-                      filteredPlantList: filteredPlantList/* ,
-                      plantList: fullPlantList */);
-                });
-          },
+        Center(
+          child: ElevatedButton(
+            child: const Text('showModalBottomSheet'),
+            onPressed: () {
+              showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return SizedBox(
+                      height: 800,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: TextField(
+                                onChanged: (value) => _runFilter(value),
+                                decoration: const InputDecoration(
+                                    labelText: 'Search',
+                                    suffixIcon: Icon(Icons.search))),
+                          ),
+                          ActionChip(
+                            avatar: Icon(favorite
+                                ? Icons.favorite
+                                : Icons.favorite_border),
+                            label: const Text('Save to favorites'),
+                            onPressed: () {
+                              setState(() {
+                                favorite = !favorite;
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                          Text(favorite.toString())
+                        ],
+                      ),
+                    );
+                  });
+            },
+          ),
         ),
         Expanded(
           child: filteredPlantList.isNotEmpty
               ? PlantList(
-                  filteredPlantList: filteredPlantList/* , plantList: fullPlantList */)
+                  filteredPlantList:
+                      filteredPlantList /* , plantList: fullPlantList */)
               : const Padding(
                   padding: EdgeInsets.symmetric(vertical: 20),
                   child: Text(
@@ -111,75 +157,10 @@ class _OpenContainerWrapper extends StatelessWidget {
   }
 }
 
-class SearchZone extends StatefulWidget {
-  const SearchZone(
-      {super.key/* , required this.plantList */, required this.filteredPlantList});
-  //final List<Plant> plantList;
-  final List<Plant> filteredPlantList;
-
-  @override
-  State<SearchZone> createState() => _SearchZoneState();
-  // This function is called whenever the text field changes
-}
-
-class _SearchZoneState extends State<SearchZone> {
-  //_SearchZoneState({required this.plantList});
-  late List<Plant> filteredPlantList;
- // List<Plant> fullPlantList = [];
-  @override
-  initState() {
-    filteredPlantList = widget.filteredPlantList;
-   // fullPlantList = widget.plantList;
-    super.initState();
-  }
-
-  void _runFilter(String enteredKeyword) {
-    List<Plant> results = [];
-    if (enteredKeyword.isEmpty) {
-      // if the search field is empty or only contains white-space, we'll display all items
-      results = filteredPlantList;
-    } else {
-      results = filteredPlantList.where((Plant element) {
-        return element.name
-            .toLowerCase()
-            .contains(enteredKeyword.toLowerCase());
-      }).toList();
-    }
-    // Refresh the UI
-    setState(() {
-      filteredPlantList = results;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        height: 800,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: TextField(
-                    onChanged: (value) => _runFilter(value),
-                    //decoration: const InputDecoration(labelText: 'Search', suffixIcon: Icon(Icons.search))
-                ),
-              ),
-              filteredPlantList.isNotEmpty ? Text(filteredPlantList[0].name) : const Text('empty plant list')
-              /* ElevatedButton(
-                child: const Text('Close BottomSheet'),
-                onPressed: () => Navigator.pop(context),
-              ), */
-            ],
-          ),
-      );
-  }
-}
-
 class PlantList extends StatelessWidget {
   PlantList(
-      {super.key/* , required this.plantList */, required this.filteredPlantList});
+      {super.key /* , required this.plantList */,
+      required this.filteredPlantList});
   //final List<Plant> plantList;
   final List<Plant> filteredPlantList;
   final scrollController = ScrollController();
