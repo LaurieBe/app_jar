@@ -3,7 +3,6 @@ import 'package:app_jar/plant.dart';
 import 'package:app_jar/plantpage.dart';
 import 'package:flutter/material.dart'; // /!\ unsupported by web app
 
-
 class PlantListPage extends StatefulWidget {
   const PlantListPage({required this.plantList, super.key});
   final List<Plant> plantList;
@@ -14,8 +13,10 @@ class PlantListPage extends StatefulWidget {
 class _PlantListPageState extends State<PlantListPage> {
   late List<Plant> plantList = [];
   late List<Plant> filteredPlantList;
-  bool favorite = false;
+  bool wishlistPressed = false;
+  bool hardinessPressed = false;
   final String name = 'Plantes';
+
   @override
   initState() {
     filteredPlantList = widget.plantList;
@@ -23,7 +24,7 @@ class _PlantListPageState extends State<PlantListPage> {
     super.initState();
   }
 
-  void _runFilter(String enteredKeyword) {
+  void _runSearch(String enteredKeyword) {
     List<Plant> results = [];
     if (enteredKeyword.isEmpty) {
       // if the search field is empty or only contains white-space, we'll display all items
@@ -41,71 +42,112 @@ class _PlantListPageState extends State<PlantListPage> {
     });
   }
 
+  void _wishlistFilter() {
+    List<Plant> results = [];
+    wishlistPressed
+        ? results = widget.plantList.where((Plant element) {
+            return element.wish!.toLowerCase().contains('x'.toLowerCase());
+          }).toList()
+        : results = widget.plantList;
+
+    // Refresh the UI
+    setState(() {
+      filteredPlantList = results;
+    });
+  }
+
+  void _hardinessFilter() {
+    List<Plant> results = [];
+    hardinessPressed
+        ? results = widget.plantList.where((Plant element) {
+            return element.hardiness!.contains('!');
+          }).toList()
+        : results = widget.plantList;
+    // Refresh the UI
+    setState(() {
+      filteredPlantList = results;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(name),
-        scrolledUnderElevation: 2,
-        shadowColor: Theme.of(context).shadowColor,
-        actions: [
+        appBar: AppBar(
+          title: Text(name),
+          scrolledUnderElevation: 2,
+          shadowColor: Theme.of(context).shadowColor,
+          actions: [
             ElevatedButton(
-                    child: const Icon(Icons.search),
-                    onPressed: () {
-                      showModalBottomSheet<void>(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return SizedBox(
-                              height: 800,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                                    child: TextField(
-                                        onChanged: (value) => _runFilter(value),
-                                        decoration: const InputDecoration(
-                                            labelText: 'Search',
-                                            suffixIcon: Icon(Icons.search))),
-                                  ),
-                                  ActionChip(
-                                    avatar: Icon(favorite
-                                        ? Icons.favorite
-                                        : Icons.favorite_border),
-                                    label: const Text('Save to favorites'),
-                                    onPressed: () {
-                                      setState(() {
-                                        favorite = !favorite;
-                                      });
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  Text(favorite.toString())
-                                ],
-                              ),
-                            );
-                          });
-                    },
-                  ),
-        ],
-      ),
-      body:Column(
-              children: [
-                Expanded(
-                  child: filteredPlantList.isNotEmpty
-                      ? PlantList(filteredPlantList:filteredPlantList)
-                      : const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 20),
-                          child: Text(
-                            'Pas de résultat',
-                            style: TextStyle(fontSize: 24),
-                          ),
+              child: const Icon(Icons.search),
+              onPressed: () {
+                showModalBottomSheet<void>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SizedBox(
+                        height: 800,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: TextField(
+                                  onChanged: (value) => _runSearch(value),
+                                  decoration: const InputDecoration(
+                                      labelText: 'Search',
+                                      suffixIcon: Icon(Icons.search))),
+                            ),
+                            ActionChip(
+                              avatar: Icon(wishlistPressed
+                                  ? Icons.favorite
+                                  : Icons.favorite_border),
+                              label: const Text('Wishlist'),
+                              onPressed: () {
+                                setState(() {
+                                  wishlistPressed = !wishlistPressed;
+                                });
+                                _wishlistFilter();
+                                Navigator.pop(context);
+                              },
+                            ),
+                            ActionChip(
+                              avatar: Icon(hardinessPressed
+                                  ? Icons.thermostat
+                                  : Icons.thermostat_outlined),
+                              label: const Text('Wishlist'),
+                              onPressed: () {
+                                setState(() {
+                                  hardinessPressed = !hardinessPressed;
+                                });
+                                _hardinessFilter();
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
                         ),
-                ),
-              ],
-            )
-    );}
+                      );
+                    });
+              },
+            ),
+          ],
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: filteredPlantList.isNotEmpty
+                  ? PlantList(filteredPlantList: filteredPlantList)
+                  : const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Text(
+                        'Pas de résultat',
+                        style: TextStyle(fontSize: 24),
+                      ),
+                    ),
+            ),
+          ],
+        ));
+  }
 }
 
 class _OpenContainerWrapper extends StatelessWidget {
@@ -132,7 +174,9 @@ class _OpenContainerWrapper extends StatelessWidget {
       closedColor: theme.cardColor,
       closedBuilder: (context, openContainer) {
         return InkWell(
-          onTap: () {openContainer();},
+          onTap: () {
+            openContainer();
+          },
           child: closedChild,
         );
       },
@@ -141,7 +185,7 @@ class _OpenContainerWrapper extends StatelessWidget {
 }
 
 class PlantList extends StatelessWidget {
-  PlantList({super.key,required this.filteredPlantList});
+  PlantList({super.key, required this.filteredPlantList});
   final List<Plant> filteredPlantList;
   final scrollController = ScrollController();
   @override
