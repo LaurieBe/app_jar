@@ -1,40 +1,21 @@
-import 'dart:developer';
-
 import 'package:animations/animations.dart';
 import 'package:app_jar/plant.dart';
 import 'package:app_jar/plantpage.dart';
 import 'package:flutter/material.dart'; // /!\ unsupported by web app
 
-class PlantListPage extends StatelessWidget {
-  PlantListPage({super.key, required this.plantList});
-  final List<Plant> plantList;
-  final name = const Text('Plantes').toString();
-  @override
-  Widget build(BuildContext context) {
-    log('building plantlistpage. first plant in plant list: ');
-    log(plantList[0].name);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Plantes'),
-        scrolledUnderElevation: 2,
-        shadowColor: Theme.of(context).shadowColor,
-      ),
-      body: MyPlantList(plantList: plantList),
-    );
-  }
-}
 
-class MyPlantList extends StatefulWidget {
-  const MyPlantList({required this.plantList, super.key});
+class PlantListPage extends StatefulWidget {
+  const PlantListPage({required this.plantList, super.key});
   final List<Plant> plantList;
   @override
-  State<MyPlantList> createState() => _MyPlantListState();
+  State<PlantListPage> createState() => _PlantListPageState();
 }
 
-class _MyPlantListState extends State<MyPlantList> {
+class _PlantListPageState extends State<PlantListPage> {
   late List<Plant> plantList = [];
   late List<Plant> filteredPlantList;
   bool favorite = false;
+  final String name = 'Plantes';
   @override
   initState() {
     filteredPlantList = widget.plantList;
@@ -62,65 +43,71 @@ class _MyPlantListState extends State<MyPlantList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Center(
-          child: ElevatedButton(
-            child: const Text('showModalBottomSheet'),
-            onPressed: () {
-              showModalBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return SizedBox(
-                      height: 800,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: TextField(
-                                onChanged: (value) => _runFilter(value),
-                                decoration: const InputDecoration(
-                                    labelText: 'Search',
-                                    suffixIcon: Icon(Icons.search))),
-                          ),
-                          ActionChip(
-                            avatar: Icon(favorite
-                                ? Icons.favorite
-                                : Icons.favorite_border),
-                            label: const Text('Save to favorites'),
-                            onPressed: () {
-                              setState(() {
-                                favorite = !favorite;
-                              });
-                              Navigator.pop(context);
-                            },
-                          ),
-                          Text(favorite.toString())
-                        ],
-                      ),
-                    );
-                  });
-            },
-          ),
-        ),
-        Expanded(
-          child: filteredPlantList.isNotEmpty
-              ? PlantList(
-                  filteredPlantList:
-                      filteredPlantList /* , plantList: fullPlantList */)
-              : const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Text(
-                    'Pas de résultat',
-                    style: TextStyle(fontSize: 24),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(name),
+        scrolledUnderElevation: 2,
+        shadowColor: Theme.of(context).shadowColor,
+        actions: [
+            ElevatedButton(
+                    child: const Icon(Icons.search),
+                    onPressed: () {
+                      showModalBottomSheet<void>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SizedBox(
+                              height: 800,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    child: TextField(
+                                        onChanged: (value) => _runFilter(value),
+                                        decoration: const InputDecoration(
+                                            labelText: 'Search',
+                                            suffixIcon: Icon(Icons.search))),
+                                  ),
+                                  ActionChip(
+                                    avatar: Icon(favorite
+                                        ? Icons.favorite
+                                        : Icons.favorite_border),
+                                    label: const Text('Save to favorites'),
+                                    onPressed: () {
+                                      setState(() {
+                                        favorite = !favorite;
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  Text(favorite.toString())
+                                ],
+                              ),
+                            );
+                          });
+                    },
                   ),
+        ],
+      ),
+      body:Column(
+              children: [
+                Expanded(
+                  child: filteredPlantList.isNotEmpty
+                      ? PlantList(
+                          filteredPlantList:
+                              filteredPlantList /* , plantList: fullPlantList */)
+                      : const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 20),
+                          child: Text(
+                            'Pas de résultat',
+                            style: TextStyle(fontSize: 24),
+                          ),
+                        ),
                 ),
-        ),
-      ],
-    );
-  }
+              ],
+            )
+    );}
 }
 
 class _OpenContainerWrapper extends StatelessWidget {
