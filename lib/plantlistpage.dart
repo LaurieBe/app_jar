@@ -94,9 +94,7 @@ class _PlantListPageState extends State<PlantListPage> {
               children: [
                 Expanded(
                   child: filteredPlantList.isNotEmpty
-                      ? PlantList(
-                          filteredPlantList:
-                              filteredPlantList /* , plantList: fullPlantList */)
+                      ? PlantList(filteredPlantList:filteredPlantList)
                       : const Padding(
                           padding: EdgeInsets.symmetric(vertical: 20),
                           child: Text(
@@ -134,9 +132,7 @@ class _OpenContainerWrapper extends StatelessWidget {
       closedColor: theme.cardColor,
       closedBuilder: (context, openContainer) {
         return InkWell(
-          onTap: () {
-            openContainer();
-          },
+          onTap: () {openContainer();},
           child: closedChild,
         );
       },
@@ -145,10 +141,7 @@ class _OpenContainerWrapper extends StatelessWidget {
 }
 
 class PlantList extends StatelessWidget {
-  PlantList(
-      {super.key /* , required this.plantList */,
-      required this.filteredPlantList});
-  //final List<Plant> plantList;
+  PlantList({super.key,required this.filteredPlantList});
   final List<Plant> filteredPlantList;
   final scrollController = ScrollController();
   @override
@@ -168,7 +161,6 @@ class PlantList extends StatelessWidget {
                 index: index,
                 closedChild: ListTile(
                   title: Text(filteredPlantList[index].name),
-                  subtitle: Text(filteredPlantList[index].scientificName ?? ''),
                   trailing: Text(sizeAsText),
                 ));
           },
