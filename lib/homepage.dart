@@ -98,9 +98,7 @@ class HomePage extends StatelessWidget {
 
       //vérifier si la liste de plante est présente
       if (model.plantList.isNotEmpty) {
-        log('Plant list ok ! first row : ');
-        log(model.plantList[0].name);
-        log(model.plantList[0].wish ?? 'no wish');
+        log('Plant list ok');
       } else {
         log('il faut charger la plantlist');
         pickFile();

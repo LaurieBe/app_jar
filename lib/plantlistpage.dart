@@ -115,7 +115,7 @@ class _PlantListPageState extends State<PlantListPage> {
                               avatar: Icon(hardinessPressed
                                   ? Icons.thermostat
                                   : Icons.thermostat_outlined),
-                              label: const Text('Wishlist'),
+                              label: const Text('Rusticité'),
                               onPressed: () {
                                 setState(() {
                                   hardinessPressed = !hardinessPressed;
