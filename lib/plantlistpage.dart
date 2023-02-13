@@ -134,48 +134,57 @@ class _PlantListPageState extends State<PlantListPage> {
         body: Column(
           children: [
             ExpansionTile(
-              title: Text('Recherche'),
-              leading: Icon(Icons.search),
-              backgroundColor: Theme,
+              title: Text("${filteredPlantList.length.toString()} résultats"),
+              trailing: const Icon(Icons.search),
+              backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
               children: [
                 Padding(
                   padding:const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextField(
-                      onChanged: (value) => _runSearch(value),
-                      decoration: const InputDecoration(
-                          labelText: 'Search')),
-                ),
-                Wrap(
-                  children: [
-                      FilterChip(
-                        selected: wishlistPressed,
-                        showCheckmark: true,
-                        label: const Text('Wishlist'),
-                        onSelected: (bool value) {
-                          setState(() {
-                            wishlistPressed = value;
-                            hardinessPressed = false;
-                          });
-                          _wishlistFilter();
-                        },
-                      ),
-                      FilterChip(
-                        selected: hardinessPressed,
-                        showCheckmark: true,
-                        label: const Text('Rusticité'),
-                        onSelected: (bool value) {
-                          setState(() {
-                            hardinessPressed = value;
-                            wishlistPressed = false;
-                          });
-                          _hardinessFilter();
-                        },
+                  child: 
+                  Column( 
+                    children : [
+                      TextField(
+                        onChanged: (value) => _runSearch(value),
+                        decoration: const InputDecoration(
+                            hintText: 'Recherche')),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Wrap(
+                          spacing: 5,
+                          children: [
+                              FilterChip(
+                                visualDensity: const VisualDensity(horizontal: -3,vertical: -3),
+                                selected: wishlistPressed,
+                                showCheckmark: true,
+                                label: const Text('Wishlist'),
+                                onSelected: (bool value) {
+                                  setState(() {
+                                    wishlistPressed = value;
+                                    hardinessPressed = false;
+                                  });
+                                  _wishlistFilter();
+                                },
+                              ),
+                              FilterChip(
+                                visualDensity: const VisualDensity(horizontal: -3,vertical: -3),
+                                selected: hardinessPressed,
+                                showCheckmark: true,
+                                label: const Text('Rusticité'),
+                                onSelected: (bool value) {
+                                  setState(() {
+                                    hardinessPressed = value;
+                                    wishlistPressed = false;
+                                  });
+                                  _hardinessFilter();
+                                },
+                              )
+                          ],
                       )
-                  ],
-                )
-              ],
+             )]),
+                ),
+                 ],
               ),
-            Text("${filteredPlantList.length.toString()} résultats"),
+            
             Expanded(
               child: filteredPlantList.isNotEmpty
                   ? PlantList(filteredPlantList: filteredPlantList)
