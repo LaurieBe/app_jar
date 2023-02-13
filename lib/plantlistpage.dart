@@ -76,7 +76,7 @@ class _PlantListPageState extends State<PlantListPage> {
           title: Text(name),
           scrolledUnderElevation: 2,
           shadowColor: Theme.of(context).shadowColor,
-          actions: [
+         /*  actions: [
             ElevatedButton(
               child: const Icon(Icons.search),
               onPressed: () {
@@ -90,35 +90,34 @@ class _PlantListPageState extends State<PlantListPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                              padding:const EdgeInsets.symmetric(horizontal: 20),
                               child: TextField(
                                   onChanged: (value) => _runSearch(value),
                                   decoration: const InputDecoration(
                                       labelText: 'Search',
                                       suffixIcon: Icon(Icons.search))),
                             ),
-                            ActionChip(
-                              avatar: Icon(wishlistPressed
-                                  ? Icons.favorite
-                                  : Icons.favorite_border),
+                            FilterChip(
+                              selected: wishlistPressed,
+                              showCheckmark: true,
                               label: const Text('Wishlist'),
-                              onPressed: () {
+                              onSelected: (bool value) {
                                 setState(() {
-                                  wishlistPressed = !wishlistPressed;
+                                  wishlistPressed = value;
+                                  hardinessPressed = false;
                                 });
                                 _wishlistFilter();
                                 Navigator.pop(context);
                               },
                             ),
-                            ActionChip(
-                              avatar: Icon(hardinessPressed
-                                  ? Icons.thermostat
-                                  : Icons.thermostat_outlined),
+                            FilterChip(
+                              selected: hardinessPressed,
+                              showCheckmark: true,
                               label: const Text('Rusticité'),
-                              onPressed: () {
+                              onSelected: (bool value) {
                                 setState(() {
-                                  hardinessPressed = !hardinessPressed;
+                                  hardinessPressed = value;
+                                  wishlistPressed = false;
                                 });
                                 _hardinessFilter();
                                 Navigator.pop(context);
@@ -131,9 +130,52 @@ class _PlantListPageState extends State<PlantListPage> {
               },
             ),
           ],
-        ),
+        */ ),
         body: Column(
           children: [
+            ExpansionTile(
+              title: Text('Recherche'),
+              leading: Icon(Icons.search),
+              backgroundColor: Theme,
+              children: [
+                Padding(
+                  padding:const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextField(
+                      onChanged: (value) => _runSearch(value),
+                      decoration: const InputDecoration(
+                          labelText: 'Search')),
+                ),
+                Wrap(
+                  children: [
+                      FilterChip(
+                        selected: wishlistPressed,
+                        showCheckmark: true,
+                        label: const Text('Wishlist'),
+                        onSelected: (bool value) {
+                          setState(() {
+                            wishlistPressed = value;
+                            hardinessPressed = false;
+                          });
+                          _wishlistFilter();
+                        },
+                      ),
+                      FilterChip(
+                        selected: hardinessPressed,
+                        showCheckmark: true,
+                        label: const Text('Rusticité'),
+                        onSelected: (bool value) {
+                          setState(() {
+                            hardinessPressed = value;
+                            wishlistPressed = false;
+                          });
+                          _hardinessFilter();
+                        },
+                      )
+                  ],
+                )
+              ],
+              ),
+            Text("${filteredPlantList.length.toString()} résultats"),
             Expanded(
               child: filteredPlantList.isNotEmpty
                   ? PlantList(filteredPlantList: filteredPlantList)
