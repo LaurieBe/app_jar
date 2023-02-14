@@ -55,6 +55,7 @@ class _PlantListPageState extends State<PlantListPage> {
     // Refresh the UI
     setState(() {
       filteredPlantList = results;
+      hardinessPressed = false;
     });
   }
 
@@ -68,6 +69,7 @@ class _PlantListPageState extends State<PlantListPage> {
     // Refresh the UI
     setState(() {
       filteredPlantList = results;
+      wishlistPressed = false;
     });
   }
 
@@ -94,8 +96,7 @@ class _PlantListPageState extends State<PlantListPage> {
                   decoration: const InputDecoration(hintText: 'Recherche')),
               flexibleSpace: FlexibleSpaceBar(
                 background: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 15),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -114,7 +115,6 @@ class _PlantListPageState extends State<PlantListPage> {
                                 onSelected: (bool value) {
                                   setState(() {
                                     wishlistPressed = value;
-                                    hardinessPressed = false;
                                   });
                                   _wishlistFilter();
                                 },
@@ -128,7 +128,6 @@ class _PlantListPageState extends State<PlantListPage> {
                                 onSelected: (bool value) {
                                   setState(() {
                                     hardinessPressed = value;
-                                    wishlistPressed = false;
                                   });
                                   _hardinessFilter();
                                 },
