@@ -3,8 +3,6 @@ import 'package:app_jar/plant.dart';
 import 'package:app_jar/plantpage.dart';
 import 'package:flutter/material.dart';
 
-import 'main.dart'; // /!\ unsupported by web app
-
 class PlantListPage extends StatefulWidget {
   const PlantListPage({required this.plantList, super.key});
   final List<Plant> plantList;
@@ -41,6 +39,8 @@ class _PlantListPageState extends State<PlantListPage> {
     // Refresh the UI
     setState(() {
       filteredPlantList = results;
+      hardinessPressed = false;
+      wishlistPressed = false;
     });
   }
 
@@ -74,11 +74,11 @@ class _PlantListPageState extends State<PlantListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(name),
-              scrolledUnderElevation: 2,
+        appBar: AppBar(
+          title: Text(name),
+          scrolledUnderElevation: 2,
         ),
-      body : CustomScrollView(slivers: <Widget>[
+        body: CustomScrollView(slivers: <Widget>[
           //MyAppBar(name:name),
           SliverAppBar(
               // Make the initial height of the SliverAppBar larger than normal.
@@ -89,62 +89,66 @@ class _PlantListPageState extends State<PlantListPage> {
               snap: true,
               pinned: false,
               floating: true,
-              title: 
-                  TextField(
-                    onChanged: (value) => _runSearch(value),
-                    decoration: const InputDecoration(hintText: 'Recherche')),
+              title: TextField(
+                  onChanged: (value) => _runSearch(value),
+                  decoration: const InputDecoration(hintText: 'Recherche')),
               flexibleSpace: FlexibleSpaceBar(
-                background : Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+                background: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 15),
                     child: Column(
-                      crossAxisAlignment : CrossAxisAlignment.start,
-                      children :[
-                      const SizedBox(height: 50,),
-                      Wrap(
-                        spacing: 5,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                            FilterChip(
-                              visualDensity: const VisualDensity(horizontal: -3,vertical: -3),
-                              selected: wishlistPressed,
-                              showCheckmark: true,
-                              label: const Text('Wishlist'),
-                              onSelected: (bool value) {
-                                setState(() {
-                                  wishlistPressed = value;
-                                  hardinessPressed = false;
-                                });
-                                _wishlistFilter();
-                              },
-                            ),
-                            FilterChip(
-                              visualDensity: const VisualDensity(horizontal: -3,vertical: -3),
-                              selected: hardinessPressed,
-                              showCheckmark: true,
-                              label: const Text('Rusticité'),
-                              onSelected: (bool value) {
-                                setState(() {
-                                  hardinessPressed = value;
-                                  wishlistPressed = false;
-                                });
-                                _hardinessFilter();
-                              },
-                            )
-                        ],
-                    ),
-                    Text("${filteredPlantList.length.toString()} résultats"),
-                ])
-              ),)
-            ),
+                          const SizedBox(
+                            height: 50,
+                          ),
+                          Wrap(
+                            spacing: 5,
+                            children: [
+                              FilterChip(
+                                visualDensity: const VisualDensity(
+                                    horizontal: -3, vertical: -3),
+                                selected: wishlistPressed,
+                                showCheckmark: true,
+                                label: const Text('Wishlist'),
+                                onSelected: (bool value) {
+                                  setState(() {
+                                    wishlistPressed = value;
+                                    hardinessPressed = false;
+                                  });
+                                  _wishlistFilter();
+                                },
+                              ),
+                              FilterChip(
+                                visualDensity: const VisualDensity(
+                                    horizontal: -3, vertical: -3),
+                                selected: hardinessPressed,
+                                showCheckmark: true,
+                                label: const Text('Rusticité'),
+                                onSelected: (bool value) {
+                                  setState(() {
+                                    hardinessPressed = value;
+                                    wishlistPressed = false;
+                                  });
+                                  _hardinessFilter();
+                                },
+                              )
+                            ],
+                          ),
+                          Text(
+                              "${filteredPlantList.length.toString()} résultats"),
+                        ])),
+              )),
           filteredPlantList.isNotEmpty
-                ? PlantList(filteredPlantList: filteredPlantList)
-                : const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    child: Text(
-                      'Pas de résultat',
-                      style: TextStyle(fontSize: 24),
-                    ),
-                  ),  
-    ]));
+              ? PlantList(filteredPlantList: filteredPlantList)
+              : const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: Text(
+                    'Pas de résultat',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                ),
+        ]));
   }
 }
 
@@ -190,9 +194,10 @@ class PlantList extends StatelessWidget {
   Widget build(BuildContext context) {
     return /* Scrollbar(
         controller: scrollController,
-        child:  */SliverList(
-          delegate: SliverChildBuilderDelegate 
-            ( (context, index) {
+        child:  */
+        SliverList(delegate: SliverChildBuilderDelegate(
+          childCount:filteredPlantList.length,
+          (context, index) {
             String sizeAsText;
             filteredPlantList[index].size == null
                 ? sizeAsText = ''
@@ -204,8 +209,7 @@ class PlantList extends StatelessWidget {
                   title: Text(filteredPlantList[index].name),
                   trailing: Text(sizeAsText),
                 ));
-          },)
-
-        );
+          },
+    ));
   }
 }
