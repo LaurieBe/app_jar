@@ -1,7 +1,9 @@
 import 'package:animations/animations.dart';
 import 'package:app_jar/plant.dart';
 import 'package:app_jar/plantpage.dart';
-import 'package:flutter/material.dart'; // /!\ unsupported by web app
+import 'package:flutter/material.dart';
+
+import 'main.dart'; // /!\ unsupported by web app
 
 class PlantListPage extends StatefulWidget {
   const PlantListPage({required this.plantList, super.key});
@@ -71,7 +73,68 @@ class _PlantListPageState extends State<PlantListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScrollView(slivers: <Widget>[
+          MyAppBar(name:name),
+          SliverAppBar(
+                  automaticallyImplyLeading: false,
+                  floating: true,
+                  // Display a placeholder widget to visualize the shrinking size.
+                  flexibleSpace: Column
+                        (children : [
+                          SizedBox(height: 100,),
+                          TextField(
+                            onChanged: (value) => _runSearch(value),
+                            decoration: const InputDecoration(hintText: 'Recherche')),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Wrap(
+                              spacing: 5,
+                              children: [
+                                  FilterChip(
+                                    visualDensity: const VisualDensity(horizontal: -3,vertical: -3),
+                                    selected: wishlistPressed,
+                                    showCheckmark: true,
+                                    label: const Text('Wishlist'),
+                                    onSelected: (bool value) {
+                                      setState(() {
+                                        wishlistPressed = value;
+                                        hardinessPressed = false;
+                                      });
+                                      _wishlistFilter();
+                                    },
+                                  ),
+                                  FilterChip(
+                                    visualDensity: const VisualDensity(horizontal: -3,vertical: -3),
+                                    selected: hardinessPressed,
+                                    showCheckmark: true,
+                                    label: const Text('Rusticité'),
+                                    onSelected: (bool value) {
+                                      setState(() {
+                                        hardinessPressed = value;
+                                        wishlistPressed = false;
+                                      });
+                                      _hardinessFilter();
+                                    },
+                                  )
+                              ],
+                          ))],
+                
+              ),
+              // Make the initial height of the SliverAppBar larger than normal.
+              expandedHeight: 110,
+            ),
+          filteredPlantList.isNotEmpty
+                ? PlantList(filteredPlantList: filteredPlantList)
+                : const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Text(
+                      'Pas de résultat',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ),  
+    ]);
+    
+    /* Scaffold(
         appBar: AppBar(
           title: Text(name),
           scrolledUnderElevation: 2,
@@ -197,7 +260,8 @@ class _PlantListPageState extends State<PlantListPage> {
                     ),
             ),
           ],
-        ));
+        ))
+        ; */
   }
 }
 
@@ -241,12 +305,11 @@ class PlantList extends StatelessWidget {
   final scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
-    return Scrollbar(
+    return /* Scrollbar(
         controller: scrollController,
-        child: ListView.separated(
-          controller: scrollController,
-          itemCount: filteredPlantList.length,
-          itemBuilder: (context, index) {
+        child:  */SliverList(
+          delegate: SliverChildBuilderDelegate 
+            ( (context, index) {
             String sizeAsText;
             filteredPlantList[index].size == null
                 ? sizeAsText = ''
@@ -258,13 +321,8 @@ class PlantList extends StatelessWidget {
                   title: Text(filteredPlantList[index].name),
                   trailing: Text(sizeAsText),
                 ));
-          },
-          separatorBuilder: (BuildContext context, int index) => Divider(
-            height: 1,
-            color: Theme.of(context).colorScheme.outline.withOpacity(0.4),
-            indent: 5,
-            endIndent: 5,
-          ),
-        ));
+          },)
+
+        );
   }
 }
