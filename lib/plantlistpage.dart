@@ -73,55 +73,54 @@ class _PlantListPageState extends State<PlantListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: <Widget>[
-          MyAppBar(name:name),
+    return Scaffold(
+      appBar: AppBar(title: Text(name),),
+      body : CustomScrollView(slivers: <Widget>[
+          //MyAppBar(name:name),
           SliverAppBar(
-                  automaticallyImplyLeading: false,
-                  floating: true,
-                  // Display a placeholder widget to visualize the shrinking size.
-                  flexibleSpace: Column
-                        (children : [
-                          SizedBox(height: 100,),
-                          TextField(
-                            onChanged: (value) => _runSearch(value),
-                            decoration: const InputDecoration(hintText: 'Recherche')),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Wrap(
-                              spacing: 5,
-                              children: [
-                                  FilterChip(
-                                    visualDensity: const VisualDensity(horizontal: -3,vertical: -3),
-                                    selected: wishlistPressed,
-                                    showCheckmark: true,
-                                    label: const Text('Wishlist'),
-                                    onSelected: (bool value) {
-                                      setState(() {
-                                        wishlistPressed = value;
-                                        hardinessPressed = false;
-                                      });
-                                      _wishlistFilter();
-                                    },
-                                  ),
-                                  FilterChip(
-                                    visualDensity: const VisualDensity(horizontal: -3,vertical: -3),
-                                    selected: hardinessPressed,
-                                    showCheckmark: true,
-                                    label: const Text('Rusticité'),
-                                    onSelected: (bool value) {
-                                      setState(() {
-                                        hardinessPressed = value;
-                                        wishlistPressed = false;
-                                      });
-                                      _hardinessFilter();
-                                    },
-                                  )
-                              ],
-                          ))],
-                
-              ),
               // Make the initial height of the SliverAppBar larger than normal.
-              expandedHeight: 110,
+              expandedHeight: 110,automaticallyImplyLeading: false,
+              floating: true,
+              // Display a placeholder widget to visualize the shrinking size.
+              flexibleSpace: Column(children : [
+                  TextField(
+                    onChanged: (value) => _runSearch(value),
+                    decoration: const InputDecoration(hintText: 'Recherche')),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Wrap(
+                      spacing: 5,
+                      children: [
+                          FilterChip(
+                            visualDensity: const VisualDensity(horizontal: -3,vertical: -3),
+                            selected: wishlistPressed,
+                            showCheckmark: true,
+                            label: const Text('Wishlist'),
+                            onSelected: (bool value) {
+                              setState(() {
+                                wishlistPressed = value;
+                                hardinessPressed = false;
+                              });
+                              _wishlistFilter();
+                            },
+                          ),
+                          FilterChip(
+                            visualDensity: const VisualDensity(horizontal: -3,vertical: -3),
+                            selected: hardinessPressed,
+                            showCheckmark: true,
+                            label: const Text('Rusticité'),
+                            onSelected: (bool value) {
+                              setState(() {
+                                hardinessPressed = value;
+                                wishlistPressed = false;
+                              });
+                              _hardinessFilter();
+                            },
+                          )
+                      ],
+                    )
+                  )],
+                ),
             ),
           filteredPlantList.isNotEmpty
                 ? PlantList(filteredPlantList: filteredPlantList)
@@ -132,7 +131,7 @@ class _PlantListPageState extends State<PlantListPage> {
                       style: TextStyle(fontSize: 24),
                     ),
                   ),  
-    ]);
+    ]));
     
     /* Scaffold(
         appBar: AppBar(
