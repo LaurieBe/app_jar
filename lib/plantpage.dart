@@ -117,7 +117,7 @@ class MyPlantCaracteristics extends StatelessWidget {
                       index: index,
                       caracIcon: Icons.place,
                     ),
-              color == ""
+              color == "" 
                   ? const SizedBox(
                       height: 0,
                     )
@@ -126,7 +126,7 @@ class MyPlantCaracteristics extends StatelessWidget {
                       caracValue: color,
                       plantList: plantList,
                       index: index,
-                      caracIcon: Icons.category,
+                      caracIcon: Icons.palette,
                     ),
               leavesDescription == ""
                   ? const SizedBox(
@@ -137,7 +137,7 @@ class MyPlantCaracteristics extends StatelessWidget {
                       caracValue: leavesDescription,
                       plantList: plantList,
                       index: index,
-                      caracIcon: Icons.category,
+                      caracIcon: Icons.spa_outlined,
                     ),
               persistence == ""
                   ? const SizedBox(
@@ -148,7 +148,7 @@ class MyPlantCaracteristics extends StatelessWidget {
                       caracValue: persistence,
                       plantList: plantList,
                       index: index,
-                      caracIcon: Icons.category,
+                      caracIcon: Icons.update,
                     ),
               wish == ""
                   ? const SizedBox(
@@ -159,7 +159,7 @@ class MyPlantCaracteristics extends StatelessWidget {
                       caracValue: wish,
                       plantList: plantList,
                       index: index,
-                      caracIcon: Icons.height,
+                      caracIcon: Icons.favorite_border,
                     ),
             ],
           ),
@@ -222,7 +222,7 @@ class MyPlantCaracteristics extends StatelessWidget {
                       caracValue: ph,
                       plantList: plantList,
                       index: index,
-                      caracIcon: Icons.moving),
+                      caracIcon: Icons.bloodtype),
             ],
           ),
           comment == ""
