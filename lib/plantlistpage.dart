@@ -74,28 +74,32 @@ class _PlantListPageState extends State<PlantListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(name),),
+      appBar: AppBar(
+        title: Text(name),
+              scrolledUnderElevation: 2,
+        ),
       body : CustomScrollView(slivers: <Widget>[
           //MyAppBar(name:name),
           SliverAppBar(
               // Make the initial height of the SliverAppBar larger than normal.
               expandedHeight: 150,
+              scrolledUnderElevation: 2,
+              shadowColor: Theme.of(context).shadowColor,
               automaticallyImplyLeading: false,
               snap: true,
               pinned: false,
               floating: true,
-              // Display a placeholder widget to visualize the shrinking size.
-              title: Column(children : [
+              title: 
                   TextField(
                     onChanged: (value) => _runSearch(value),
                     decoration: const InputDecoration(hintText: 'Recherche')),
-                  ],
-                ),
               flexibleSpace: FlexibleSpaceBar(
                 background : Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Column(children :[
-                      SizedBox(height: 50,),
+                    padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+                    child: Column(
+                      crossAxisAlignment : CrossAxisAlignment.start,
+                      children :[
+                      const SizedBox(height: 50,),
                       Wrap(
                         spacing: 5,
                         children: [
@@ -126,8 +130,10 @@ class _PlantListPageState extends State<PlantListPage> {
                               },
                             )
                         ],
-                    ),])
-                  ),)
+                    ),
+                    Text("${filteredPlantList.length.toString()} résultats"),
+                ])
+              ),)
             ),
           filteredPlantList.isNotEmpty
                 ? PlantList(filteredPlantList: filteredPlantList)
@@ -139,135 +145,6 @@ class _PlantListPageState extends State<PlantListPage> {
                     ),
                   ),  
     ]));
-    
-    /* Scaffold(
-        appBar: AppBar(
-          title: Text(name),
-          scrolledUnderElevation: 2,
-          shadowColor: Theme.of(context).shadowColor,
-         /*  actions: [
-            ElevatedButton(
-              child: const Icon(Icons.search),
-              onPressed: () {
-                showModalBottomSheet<void>(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return SizedBox(
-                        height: 800,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Padding(
-                              padding:const EdgeInsets.symmetric(horizontal: 20),
-                              child: TextField(
-                                  onChanged: (value) => _runSearch(value),
-                                  decoration: const InputDecoration(
-                                      labelText: 'Search',
-                                      suffixIcon: Icon(Icons.search))),
-                            ),
-                            FilterChip(
-                              selected: wishlistPressed,
-                              showCheckmark: true,
-                              label: const Text('Wishlist'),
-                              onSelected: (bool value) {
-                                setState(() {
-                                  wishlistPressed = value;
-                                  hardinessPressed = false;
-                                });
-                                _wishlistFilter();
-                                Navigator.pop(context);
-                              },
-                            ),
-                            FilterChip(
-                              selected: hardinessPressed,
-                              showCheckmark: true,
-                              label: const Text('Rusticité'),
-                              onSelected: (bool value) {
-                                setState(() {
-                                  hardinessPressed = value;
-                                  wishlistPressed = false;
-                                });
-                                _hardinessFilter();
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    });
-              },
-            ),
-          ],
-        */ ),
-        body: Column(
-          children: [
-            ExpansionTile(
-              title: Text("${filteredPlantList.length.toString()} résultats"),
-              trailing: const Icon(Icons.search),
-              backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-              children: [
-                Padding(
-                  padding:const EdgeInsets.symmetric(horizontal: 20),
-                  child: 
-                  Column( 
-                    children : [
-                      TextField(
-                        onChanged: (value) => _runSearch(value),
-                        decoration: const InputDecoration(
-                            hintText: 'Recherche')),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Wrap(
-                          spacing: 5,
-                          children: [
-                              FilterChip(
-                                visualDensity: const VisualDensity(horizontal: -3,vertical: -3),
-                                selected: wishlistPressed,
-                                showCheckmark: true,
-                                label: const Text('Wishlist'),
-                                onSelected: (bool value) {
-                                  setState(() {
-                                    wishlistPressed = value;
-                                    hardinessPressed = false;
-                                  });
-                                  _wishlistFilter();
-                                },
-                              ),
-                              FilterChip(
-                                visualDensity: const VisualDensity(horizontal: -3,vertical: -3),
-                                selected: hardinessPressed,
-                                showCheckmark: true,
-                                label: const Text('Rusticité'),
-                                onSelected: (bool value) {
-                                  setState(() {
-                                    hardinessPressed = value;
-                                    wishlistPressed = false;
-                                  });
-                                  _hardinessFilter();
-                                },
-                              )
-                          ],
-                      )
-             )]),
-                ),
-                 ],
-              ),
-            
-            Expanded(
-              child: filteredPlantList.isNotEmpty
-                  ? PlantList(filteredPlantList: filteredPlantList)
-                  : const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      child: Text(
-                        'Pas de résultat',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-            ),
-          ],
-        ))
-        ; */
   }
 }
 
