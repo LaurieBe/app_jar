@@ -8,12 +8,14 @@ import 'package:app_jar/plant.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart'; // /!\ unsupported by web app
 
+//trigger a snackbar even if not inside scaffold
 final GlobalKey<ScaffoldMessengerState> snackbarKey =
     GlobalKey<ScaffoldMessengerState>();
 
 class AppModel extends ChangeNotifier {
   List<Plant> plantList = [];
   String? errMsg;
+
   void notify() {
     notifyListeners();
   }
@@ -26,75 +28,109 @@ class AppModel extends ChangeNotifier {
 
   Stream<List<int>> finalFileContent = const Stream.empty();
 
-  late SnackBar snackBar = SnackBar(content: Text(errMsg??'vide')); 
- 
-
   //fonction de récupération du fichier
   void pickFile() async {
-    log('starting to pick file...');
-    //String errMsg = '';
-       
+    log('--starting to pick file...');
+    late SnackBar snackBar = SnackBar(
+      content: Row(children: [
+        Text(
+          errMsg ?? '',
+          style: TextStyle(color: Colors.red.shade900),
+        ),
+        Expanded(child: Container()),
+        TextButton(
+          style: ButtonStyle(
+              overlayColor:
+                  MaterialStatePropertyAll<Color>(Colors.red.shade200)),
+          child: Text('Télécharger un fichier',
+              style: TextStyle(color: Colors.red.shade900)),
+          onPressed: () {
+            pickFile();
+          },
+        )
+      ]),
+      showCloseIcon: true,
+      closeIconColor: Colors.red.shade900,
+      backgroundColor: Colors.red.shade100,
+    );
     String documentsDirectory = await _documentsDirectory;
-    
+    final String sourcePath;
     // opens storage to pick files and the picked file or files
     // are assigned into filePicked and if no file is chosen filePicked is null.
     final filePicked = await FilePicker.platform
         .pickFiles(allowMultiple: false, allowedExtensions: ['csv']);
-    
-    // if no file is picked
-    final String sourcePath;
+
+    // check if no file is picked
     if (filePicked == null) {
       errMsg = 'Aucun fichier choisi';
-      log(errMsg??'');
-      snackbarKey.currentState?.showSnackBar(SnackBar(content: Text(errMsg??'vide'))); 
+      log(errMsg ?? '');
+      snackbarKey.currentState?.showSnackBar(snackBar);
     } else {
       sourcePath = filePicked.files.first.path!;
-      //log('source path : $sourcePath');
+
       //check path
       if (sourcePath == '') {
         errMsg = 'Pas de chemin d\'accès au fichier';
-        log(errMsg??'');
+        log(errMsg ?? '');
         snackbarKey.currentState?.showSnackBar(snackBar);
       } else {
         //check extention
         final extention = p.extension(sourcePath);
         if (extention != '.csv') {
-          errMsg = 'Mauvaise extention : $extention. Seuls les fichier CSV sont acceptés';
-          log(errMsg??'');
-          snackbarKey.currentState?.showSnackBar(SnackBar(content: Text(errMsg??'vide')));
+          errMsg =
+              'Extension du fichier est $extention. Seuls les fichier CSV sont acceptés';
+          log(errMsg ?? '');
+          snackbarKey.currentState?.showSnackBar(snackBar);
         } else {
           //identifier le fichier source
-          //log('reading file in $sourcePath');
           var sourceFile = File(sourcePath);
 
           //identifier le fichier final
           String finalPath = p.join(
               documentsDirectory.toString(), 'app_jar', 'caracteristiques.csv');
-          //log('documents directory : $documentsDirectory');
-          //log('final path : $finalPath');
 
           //copier fichier source à la place du fichier final
           sourceFile.copySync(finalPath);
 
-          log('finish to pick file');
+          log('--finish to pick file');
+          populatePlantList();
         }
       }
     }
-    populatePlantList(); 
   }
 
   void populatePlantList() async {
+    late SnackBar snackBar = SnackBar(
+      content: Row(children: [
+        Text(
+          errMsg ?? '',
+          style: TextStyle(color: Colors.red.shade900),
+        ),
+        Expanded(child: Container()),
+        TextButton(
+          style: ButtonStyle(
+              overlayColor:
+                  MaterialStatePropertyAll<Color>(Colors.red.shade200)),
+          child: Text('Télécharger un fichier',
+              style: TextStyle(color: Colors.red.shade900)),
+          onPressed: () {
+            pickFile();
+          },
+        )
+      ]),
+      showCloseIcon: true,
+      closeIconColor: Colors.red.shade900,
+      backgroundColor: Colors.red.shade100,
+    );
     String documentsDirectory = await _documentsDirectory;
     String finalPath = p.join(
         documentsDirectory.toString(), 'app_jar', 'caracteristiques.csv');
     late var finalFile = File(finalPath);
+    plantList = [];
 
-    log('starting to populate plantlist');
+    log('--starting to populate plantlist');
     finalFileContent = finalFile.openRead();
-    log('file openened');
-/*     if (await finalFileContent.isEmpty) {
-      log('final File Content empty');
-    } else { */
+
     //mettre les éléments du fichier dans une liste
     List<List<dynamic>> fieldsDyn = await finalFileContent
         .transform(utf8.decoder)
@@ -102,10 +138,10 @@ class AppModel extends ChangeNotifier {
         .toList();
     if (fieldsDyn.isEmpty) {
       errMsg = 'Le fichier est vide';
-      final SnackBar snackBar = SnackBar(content: Text("your snackbar message"));
-snackbarKey.currentState?.showSnackBar(snackBar); 
+      log(errMsg ?? '');
+      snackbarKey.currentState?.showSnackBar(snackBar);
     } else {
-      log(fieldsDyn[1][0]);
+      //log(fieldsDyn[1][0]);
 
       //définir les colonnes correspondant à chacun des champs de plant et en faire une liste
       for (List<dynamic> line in fieldsDyn) {
@@ -121,7 +157,7 @@ snackbarKey.currentState?.showSnackBar(snackBar);
         }
 
         // remplissage de la liste de plantes
-        log('filing plant list...');
+        log('--filing plant list...');
         plantList.add(Plant(
           name: line[0],
           size: size?.toDouble(),
@@ -147,7 +183,9 @@ snackbarKey.currentState?.showSnackBar(snackBar);
         ));
       }
       notify();
-      log('Plant list ok !');
+      log('--Plant list ok !');
+      snackbarKey.currentState
+          ?.showSnackBar(const SnackBar(content: Text('Liste téléchargée !')));
     }
   }
 }

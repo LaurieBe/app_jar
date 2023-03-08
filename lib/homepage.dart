@@ -45,10 +45,9 @@ class HomePage extends StatelessWidget {
             TextButton.icon(
               onPressed: () {
                 model.pickFile();
-                //ScaffoldMessenger.of(context).showSnackBar(snackbarKO) ;
               },
               icon: const Icon(Icons.file_upload),
-              label: const Text('Nouveau Fichier'),
+              label: const Text('Télécharger un fichier'),
             ),
           ],
         ),
@@ -71,11 +70,8 @@ class HomePage extends StatelessWidget {
                               builder: (context) =>
                                   PlantListPage(plantList: model.plantList)));
                     } else {
-                      log('plantList empty');
+                      log('plantList empty, start populate plantlist');
                       model.populatePlantList();
-/*                       model.plantList.isEmpty 
-                      ? ScaffoldMessenger.of(context).showSnackBar(snackbarKO) 
-                      : ScaffoldMessenger.of(context).showSnackBar(snackbarOK); */
                     }
                   },
                   label: const Text(
