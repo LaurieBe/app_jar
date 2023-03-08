@@ -57,8 +57,8 @@ class AppModel extends ChangeNotifier {
     final String sourcePath;
     // opens storage to pick files and the picked file or files
     // are assigned into filePicked and if no file is chosen filePicked is null.
-    final filePicked = await FilePicker.platform
-        .pickFiles(allowMultiple: false, allowedExtensions: ['csv']);
+    final filePicked =
+        await FilePicker.platform.pickFiles(allowMultiple: false);
 
     // check if no file is picked
     if (filePicked == null) {
@@ -78,7 +78,7 @@ class AppModel extends ChangeNotifier {
         final extention = p.extension(sourcePath);
         if (extention != '.csv') {
           errMsg =
-              'Extension du fichier est $extention. Seuls les fichier CSV sont acceptés';
+              'Seuls les fichier CSV sont acceptés';
           log(errMsg ?? '');
           snackbarKey.currentState?.showSnackBar(snackBar);
         } else {
@@ -87,10 +87,11 @@ class AppModel extends ChangeNotifier {
 
           //identifier le fichier final
           String finalPath = p.join(
-              documentsDirectory.toString(), 'app_jar', 'caracteristiques.csv');
+              documentsDirectory.toString(),/*  'app_jar',  */'caracteristiques.csv');
+          log('finalPath : $finalPath');
 
           //copier fichier source à la place du fichier final
-          sourceFile.copySync(finalPath);
+          await sourceFile.copy(finalPath);
 
           log('--finish to pick file');
           populatePlantList();
@@ -99,7 +100,7 @@ class AppModel extends ChangeNotifier {
     }
   }
 
-  void populatePlantList() async {
+  Future populatePlantList() async {
     late SnackBar snackBar = SnackBar(
       content: Row(children: [
         Text(
@@ -124,7 +125,7 @@ class AppModel extends ChangeNotifier {
     );
     String documentsDirectory = await _documentsDirectory;
     String finalPath = p.join(
-        documentsDirectory.toString(), 'app_jar', 'caracteristiques.csv');
+        documentsDirectory.toString(), 'caracteristiques.csv');
     late var finalFile = File(finalPath);
     plantList = [];
 

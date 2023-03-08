@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
     log('Build screen');
 
     return Consumer<AppModel>(builder: (context, model, child) {
-     /*  var snackbarKO = SnackBar(
+      /*  var snackbarKO = SnackBar(
         content: Row(children: [
           Text(
             model.errMsg,
@@ -70,8 +70,13 @@ class HomePage extends StatelessWidget {
                               builder: (context) =>
                                   PlantListPage(plantList: model.plantList)));
                     } else {
-                      log('plantList empty, start populate plantlist');
-                      model.populatePlantList();
+                      log('plantList empty, go populate plantlist');
+                      model.populatePlantList().then((value) {Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  PlantListPage(plantList: model.plantList)));});
+                      
                     }
                   },
                   label: const Text(
