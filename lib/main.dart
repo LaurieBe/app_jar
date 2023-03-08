@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:app_jar/homepage.dart';
 import 'package:app_jar/model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
 
 Future<void> main() async {
+  var appDirectory = Directory.current.path;
   runApp(ChangeNotifierProvider(
       create: (context) => AppModel(),
       builder: (context, child) {
@@ -42,7 +46,7 @@ Future<void> main() async {
                 surfaceTint: Color(0xFF476800),
               )),
           title: 'Home', // used by the OS task switcher
-          home: const HomePage(),
+          home: HomePage(appDirectory: appDirectory),
         );
       }));
 }
