@@ -8,5 +8,6 @@ class AppModel extends ChangeNotifier {
   void notify() {
     notifyListeners();
   }
+  
 
 }

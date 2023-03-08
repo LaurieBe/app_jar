@@ -13,8 +13,8 @@ import 'package:provider/provider.dart';
 import 'package:path/path.dart' as p;
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.appDirectory});
-  final String appDirectory;
+  const HomePage({super.key, required this.documentsDirectory});
+  final String documentsDirectory;
   //final filePicked = null;
   //final fieldsDyn = null;
   //final bool listOk = false;
@@ -24,18 +24,18 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log('Build screen');
-    const snackBar = SnackBar(
-      content: Text('Liste téléchargée !'),
-    );
+    
 
-    /* var initialDirectoryUri = Platform.script.pathSegments;
+/*     var initialDirectoryUri =
+        Platform.script.pathSegments; //Platform.resolvedExecutable;
     log('initialDirectory : $initialDirectoryUri');
-    var list = initialDirectoryUri;
-    log(list.toString()); */
-    //log(list.removeLast());
+    initialDirectoryUri = initialDirectoryUri.removeLast();
+    String initialDirectoryPath =
+        p.join(initialDirectoryUri, 'assets', 'caracteristiques.csv');
+    //log(list.removeLast()); */
 
     return Consumer<AppModel>(builder: (context, model, child) {
-      log('app directory : $appDirectory');
+      log('documents directory : $documentsDirectory');
 
       //fonction de récupération du fichier
       void pickFile() async {
@@ -45,12 +45,12 @@ class HomePage extends StatelessWidget {
         final filePicked =
             await FilePicker.platform.pickFiles(allowMultiple: false);
         // if no file is picked
-        
+
         if (filePicked == null) {
           return log('no file chosen');
         } else {
           final sourcePath = filePicked.files.first.path;
-/*           var sourceFile = File(sourcePath); */
+          //var sourceFile = File(sourcePath);
           log('source path : $sourcePath');
 
           if (sourcePath == null) {
@@ -61,17 +61,17 @@ class HomePage extends StatelessWidget {
             final input = File(sourcePath).openRead();
 
             //identifier le fichier final
-            log('app directory : $appDirectory');
+            log('documents directory : $documentsDirectory');
             String finalPath =
-                p.join(appDirectory, 'assets', 'caracteristiques.csv');
+                p.join(documentsDirectory,'app_jar', 'caracteristiques.csv');
             log('final path : $finalPath');
             var finalFile = File(finalPath);
             String content = await finalFile.readAsString();
             log('initial file content : $content');
 
             //écrir le contenu dans le fichier final
-            finalFile.writeAsStringSync('FILE ACCESSED',flush: true);
-          
+            finalFile.writeAsStringSync('FILE ACCESSED', flush: true);
+
             content = finalFile.readAsStringSync();
             log('final file content : $content');
 
@@ -134,7 +134,11 @@ class HomePage extends StatelessWidget {
         }
       }
 
-      var snackbarKO = SnackBar(
+      const snackBar = SnackBar(
+      content: Text('Liste téléchargée !'),
+    );
+
+    var snackbarKO = SnackBar(
         content: Row(children: [
           Text(
             'Il manque la liste de plantes',
