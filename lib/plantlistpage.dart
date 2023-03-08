@@ -61,11 +61,10 @@ class _PlantListPageState extends State<PlantListPage> {
 
   void _hardinessFilter() {
     List<Plant> results = [];
-    hardinessPressed
-        ? results = widget.plantList.where((Plant element) {
-            return element.hardiness!.contains('!');
-          }).toList()
-        : results = widget.plantList;
+    List<Plant> listeFiltree = widget.plantList.where((Plant element) {
+      return element.hardiness!.contains('!');
+    }).toList();
+    hardinessPressed ? results = listeFiltree : results = widget.plantList;
     // Refresh the UI
     setState(() {
       filteredPlantList = results;
@@ -81,7 +80,6 @@ class _PlantListPageState extends State<PlantListPage> {
           scrolledUnderElevation: 2,
         ),
         body: CustomScrollView(slivers: <Widget>[
-          //MyAppBar(name:name),
           SliverAppBar(
               // Make the initial height of the SliverAppBar larger than normal.
               expandedHeight: 150,
@@ -96,7 +94,8 @@ class _PlantListPageState extends State<PlantListPage> {
                   decoration: const InputDecoration(hintText: 'Recherche')),
               flexibleSpace: FlexibleSpaceBar(
                 background: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 15),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -140,13 +139,16 @@ class _PlantListPageState extends State<PlantListPage> {
               )),
           filteredPlantList.isNotEmpty
               ? PlantList(filteredPlantList: filteredPlantList)
-              : const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Text(
-                    'Pas de résultat',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                ),
+              : SliverList(
+                  delegate: SliverChildListDelegate(<Widget>[
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Text(
+                      'Pas de résultat',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  )
+                ])),
         ]));
   }
 }
@@ -194,21 +196,22 @@ class PlantList extends StatelessWidget {
     return /* Scrollbar(
         controller: scrollController,
         child:  */
-        SliverList(delegate: SliverChildBuilderDelegate(
-          childCount:filteredPlantList.length,
-          (context, index) {
-            String sizeAsText;
-            filteredPlantList[index].size == null
-                ? sizeAsText = ''
-                : sizeAsText = '${filteredPlantList[index].size} m';
-            return _OpenContainerWrapper(
-                plantList: filteredPlantList,
-                index: index,
-                closedChild: ListTile(
-                  title: Text(filteredPlantList[index].name),
-                  trailing: Text(sizeAsText),
-                ));
-          },
+        SliverList(
+            delegate: SliverChildBuilderDelegate(
+      childCount: filteredPlantList.length,
+      (context, index) {
+        String sizeAsText;
+        filteredPlantList[index].size == null
+            ? sizeAsText = ''
+            : sizeAsText = '${filteredPlantList[index].size} m';
+        return _OpenContainerWrapper(
+            plantList: filteredPlantList,
+            index: index,
+            closedChild: ListTile(
+              title: Text(filteredPlantList[index].name),
+              trailing: Text(sizeAsText),
+            ));
+      },
     ));
   }
 }
