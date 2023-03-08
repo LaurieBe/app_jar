@@ -12,30 +12,30 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log('Build screen');
-    
+
     return Consumer<AppModel>(builder: (context, model, child) {
       var snackbarKO = SnackBar(
-          content: Row(children: [
-            Text(
-              'Il manque la liste de plantes',
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
-            ),
-            Expanded(child: Container()),
-            TextButton(
-              style: ButtonStyle(
-                  overlayColor: MaterialStatePropertyAll<Color>(
-                      Theme.of(context).colorScheme.error.withOpacity(0.2))),
-              child: Text('Télécharger la liste',
-                  style: TextStyle(color: Theme.of(context).colorScheme.error)),
-              onPressed: () {
-                model.pickFile();
-              },
-            )
-          ]),
-          showCloseIcon: true,
-          closeIconColor: Theme.of(context).colorScheme.error,
-          backgroundColor: Theme.of(context).colorScheme.errorContainer,
-        );
+        content: Row(children: [
+          Text(
+            'Il manque la liste de plantes',
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
+          ),
+          Expanded(child: Container()),
+          TextButton(
+            style: ButtonStyle(
+                overlayColor: MaterialStatePropertyAll<Color>(
+                    Theme.of(context).colorScheme.error.withOpacity(0.2))),
+            child: Text('Télécharger la liste',
+                style: TextStyle(color: Theme.of(context).colorScheme.error)),
+            onPressed: () {
+              model.pickFile();
+            },
+          )
+        ]),
+        showCloseIcon: true,
+        closeIconColor: Theme.of(context).colorScheme.error,
+        backgroundColor: Theme.of(context).colorScheme.errorContainer,
+      );
 
       return Scaffold(
         appBar: AppBar(
@@ -62,6 +62,7 @@ class HomePage extends StatelessWidget {
                   icon: const Icon(Icons.local_florist),
                   onHover: null,
                   onPressed: () {
+                    model.populatePlantList();
                     if (model.plantList.isNotEmpty) {
                       Navigator.push(
                           context,
