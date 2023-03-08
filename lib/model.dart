@@ -2,50 +2,66 @@ import 'dart:developer';
 import 'dart:convert';
 import 'dart:io';
 import 'package:csv/csv.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'package:app_jar/plant.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart'; // /!\ unsupported by web app
+
+final GlobalKey<ScaffoldMessengerState> snackbarKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 class AppModel extends ChangeNotifier {
   List<Plant> plantList = [];
-
+  String? errMsg;
   void notify() {
     notifyListeners();
   }
 
   Future<String> get _documentsDirectory async {
     final directory = await getApplicationDocumentsDirectory();
-    log('documents directory : ${directory.path}');
+    //log('documents directory : ${directory.path}');
     return directory.path;
   }
+
+  Stream<List<int>> finalFileContent = const Stream.empty();
+
+  late SnackBar snackBar = SnackBar(content: Text(errMsg??'vide')); 
+ 
 
   //fonction de récupération du fichier
   void pickFile() async {
     log('starting to pick file...');
+    //String errMsg = '';
+       
     String documentsDirectory = await _documentsDirectory;
+    
     // opens storage to pick files and the picked file or files
     // are assigned into filePicked and if no file is chosen filePicked is null.
     final filePicked = await FilePicker.platform
         .pickFiles(allowMultiple: false, allowedExtensions: ['csv']);
-
+    
     // if no file is picked
     final String sourcePath;
     if (filePicked == null) {
-      sourcePath = '';
-      log('no file chosen');
+      errMsg = 'Aucun fichier choisi';
+      log(errMsg??'');
+      snackbarKey.currentState?.showSnackBar(SnackBar(content: Text(errMsg??'vide'))); 
     } else {
       sourcePath = filePicked.files.first.path!;
-      log('source path : $sourcePath');
+      //log('source path : $sourcePath');
       //check path
       if (sourcePath == '') {
-        return log('no path given');
+        errMsg = 'Pas de chemin d\'accès au fichier';
+        log(errMsg??'');
+        snackbarKey.currentState?.showSnackBar(snackBar);
       } else {
         //check extention
         final extention = p.extension(sourcePath);
         if (extention != '.csv') {
-          log('wrong extention : $extention');
+          errMsg = 'Mauvaise extention : $extention. Seuls les fichier CSV sont acceptés';
+          log(errMsg??'');
+          snackbarKey.currentState?.showSnackBar(SnackBar(content: Text(errMsg??'vide')));
         } else {
           //identifier le fichier source
           //log('reading file in $sourcePath');
@@ -55,35 +71,40 @@ class AppModel extends ChangeNotifier {
           String finalPath = p.join(
               documentsDirectory.toString(), 'app_jar', 'caracteristiques.csv');
           //log('documents directory : $documentsDirectory');
-          log('final path : $finalPath');
+          //log('final path : $finalPath');
 
           //copier fichier source à la place du fichier final
           sourceFile.copySync(finalPath);
 
           log('finish to pick file');
-          populatePlantList();
         }
       }
     }
+    populatePlantList(); 
   }
 
   void populatePlantList() async {
     String documentsDirectory = await _documentsDirectory;
     String finalPath = p.join(
         documentsDirectory.toString(), 'app_jar', 'caracteristiques.csv');
-    Stream<List<int>> finalFileContent = const Stream.empty();
     late var finalFile = File(finalPath);
 
     log('starting to populate plantlist');
     finalFileContent = finalFile.openRead();
-    if (await finalFileContent.isEmpty) {
+    log('file openened');
+/*     if (await finalFileContent.isEmpty) {
       log('final File Content empty');
+    } else { */
+    //mettre les éléments du fichier dans une liste
+    List<List<dynamic>> fieldsDyn = await finalFileContent
+        .transform(utf8.decoder)
+        .transform(const CsvToListConverter(fieldDelimiter: ';'))
+        .toList();
+    if (fieldsDyn.isEmpty) {
+      errMsg = 'Le fichier est vide';
+      final SnackBar snackBar = SnackBar(content: Text("your snackbar message"));
+snackbarKey.currentState?.showSnackBar(snackBar); 
     } else {
-      //mettre les éléments du fichier dans une liste
-      List<List<dynamic>> fieldsDyn = finalFileContent
-          .transform(utf8.decoder)
-          .transform(const CsvToListConverter(fieldDelimiter: ';'))
-          .toList() as List<List>;
       log(fieldsDyn[1][0]);
 
       //définir les colonnes correspondant à chacun des champs de plant et en faire une liste
@@ -127,7 +148,6 @@ class AppModel extends ChangeNotifier {
       }
       notify();
       log('Plant list ok !');
-      //ScaffoldMessenger.of(context).showSnackBar(content: Text('Liste téléchargée !'));
     }
   }
 }

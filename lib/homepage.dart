@@ -14,10 +14,10 @@ class HomePage extends StatelessWidget {
     log('Build screen');
 
     return Consumer<AppModel>(builder: (context, model, child) {
-      var snackbarKO = SnackBar(
+     /*  var snackbarKO = SnackBar(
         content: Row(children: [
           Text(
-            'Il manque la liste de plantes',
+            model.errMsg,
             style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
           Expanded(child: Container()),
@@ -36,6 +36,7 @@ class HomePage extends StatelessWidget {
         closeIconColor: Theme.of(context).colorScheme.error,
         backgroundColor: Theme.of(context).colorScheme.errorContainer,
       );
+      var snackbarOK = const SnackBar(content: Text('Liste téléchargée !')); */
 
       return Scaffold(
         appBar: AppBar(
@@ -44,6 +45,7 @@ class HomePage extends StatelessWidget {
             TextButton.icon(
               onPressed: () {
                 model.pickFile();
+                //ScaffoldMessenger.of(context).showSnackBar(snackbarKO) ;
               },
               icon: const Icon(Icons.file_upload),
               label: const Text('Nouveau Fichier'),
@@ -62,7 +64,6 @@ class HomePage extends StatelessWidget {
                   icon: const Icon(Icons.local_florist),
                   onHover: null,
                   onPressed: () {
-                    model.populatePlantList();
                     if (model.plantList.isNotEmpty) {
                       Navigator.push(
                           context,
@@ -71,7 +72,10 @@ class HomePage extends StatelessWidget {
                                   PlantListPage(plantList: model.plantList)));
                     } else {
                       log('plantList empty');
-                      ScaffoldMessenger.of(context).showSnackBar(snackbarKO);
+                      model.populatePlantList();
+/*                       model.plantList.isEmpty 
+                      ? ScaffoldMessenger.of(context).showSnackBar(snackbarKO) 
+                      : ScaffoldMessenger.of(context).showSnackBar(snackbarOK); */
                     }
                   },
                   label: const Text(

@@ -10,6 +10,7 @@ Future<void> main() async {
       create: (context) => AppModel(),
       builder: (context, child) {
         return MaterialApp(
+          scaffoldMessengerKey: snackbarKey,
           theme: ThemeData(
               useMaterial3: true,
               colorScheme: const ColorScheme(
