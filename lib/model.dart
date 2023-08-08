@@ -77,8 +77,7 @@ class AppModel extends ChangeNotifier {
         //check extention
         final extention = p.extension(sourcePath);
         if (extention != '.csv') {
-          errMsg =
-              'Seuls les fichier CSV sont acceptés';
+          errMsg = 'Seuls les fichier CSV sont acceptés';
           log(errMsg ?? '');
           snackbarKey.currentState?.showSnackBar(snackBar);
         } else {
@@ -86,8 +85,8 @@ class AppModel extends ChangeNotifier {
           var sourceFile = File(sourcePath);
 
           //identifier le fichier final
-          String finalPath = p.join(
-              documentsDirectory.toString(),/*  'app_jar',  */'caracteristiques.csv');
+          String finalPath = p.join(documentsDirectory.toString(),
+              /*  'app_jar',  */ 'caracteristiques.csv');
           log('finalPath : $finalPath');
 
           //copier fichier source à la place du fichier final
@@ -124,8 +123,8 @@ class AppModel extends ChangeNotifier {
       backgroundColor: Colors.red.shade100,
     );
     String documentsDirectory = await _documentsDirectory;
-    String finalPath = p.join(
-        documentsDirectory.toString(), 'caracteristiques.csv');
+    String finalPath =
+        p.join(documentsDirectory.toString(), 'caracteristiques.csv');
     late var finalFile = File(finalPath);
     plantList = [];
 
@@ -185,6 +184,7 @@ class AppModel extends ChangeNotifier {
       }
       notify();
       log('--Plant list ok !');
+      log(plantList.first.name);
       snackbarKey.currentState
           ?.showSnackBar(const SnackBar(content: Text('Liste téléchargée !')));
     }

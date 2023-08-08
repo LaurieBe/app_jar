@@ -2,152 +2,72 @@
 
 import 'package:app_jar/plant.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:async';
+import 'dart:io';
 
-class MyAreaPage extends StatelessWidget {
-  const MyAreaPage({required this.plantList, super.key, required this.index});
+class WritingStorage {
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/draft.csv');
+  }
+
+  Future readDraft() async {
+    final file = await _localFile;
+    final contents = await file.readAsString();
+    return contents;
+  }
+
+  Future writeDraft(String content) async {
+    final file = await _localFile;
+    return file.writeAsString(content);
+  }
+}
+
+class MyAreaPage extends StatefulWidget {
+  const MyAreaPage(
+      {required this.plantList,
+      super.key,
+      required this.index,
+      required this.storage});
   final List<Plant> plantList;
-    final int index;
+  final int index;
+  final WritingStorage storage;
+
+  @override
+  State<MyAreaPage> createState() => _MyAreaPageState();
+}
+
+class _MyAreaPageState extends State<MyAreaPage> {
+  final String contents = 'empty';
+
+  void _addToFile(content) {
+    widget.storage.writeDraft(content);
+    widget.storage.readDraft();
+  }
+
   @override
   Widget build(BuildContext context) {
     // Material is a conceptual piece of paper on which the UI appears.
     return Scaffold(
-      /* appBar: AppBar(
+      appBar: AppBar(
         title: const Text('Zones'),
-      ), */
-      body: CustomScrollView (slivers: <Widget>[
-          const SliverAppBar(
-            pinned: true,
-            expandedHeight: 250.0,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text('Demo'),
-            ),
-          ),
-          SliverGrid.count(
-            childAspectRatio: 4,
-            crossAxisCount: 1,
-                  children: [
-                    CaracteristicsTile(
-                      caracName: 'Type',
-                      caracValue: 'type',
-                      plantList: plantList,
-                      index: index,
-                      caracIcon: Icons.category,
-                    ),
-                    CaracteristicsTile(
-                      caracName: 'Taille',
-                      caracValue: 'sizeAsText',
-                      plantList: plantList,
-                      index: index,
-                      caracIcon: Icons.height,
-                    ),
-                    CaracteristicsTile(
-                      caracName: 'Zone',
-                      caracValue: 'area',
-                      plantList: plantList,
-                      index: index,
-                      caracIcon: Icons.place,
-                    ),
-                    CaracteristicsTile(
-                      caracName: 'Couleur',
-                      caracValue: 'color',
-                      plantList: plantList,
-                      index: index,
-                      caracIcon: Icons.category,
-                    ),
-                    CaracteristicsTile(
-                      caracName: 'Feuillage',
-                      caracValue: 'leavesDescription',
-                      plantList: plantList,
-                      index: index,
-                      caracIcon: Icons.category,
-                    ),
-                    CaracteristicsTile(
-                      caracName: 'Persistance',
-                      caracValue: 'persistence',
-                      plantList: plantList,
-                      index: index,
-                      caracIcon: Icons.category,
-                    ),
-                    CaracteristicsTile(
-                      caracName: 'Wishlist',
-                      caracValue: 'wish',
-                      plantList: plantList,
-                      index: index,
-                      caracIcon: Icons.height,
-                    ),
-                    CaracteristicsTile(
-                      caracName: 'Feuillage',
-                      caracValue: 'leavesDescription',
-                      plantList: plantList,
-                      index: index,
-                      caracIcon: Icons.category,
-                    ),
-                    CaracteristicsTile(
-                      caracName: 'Persistance',
-                      caracValue: 'persistence',
-                      plantList: plantList,
-                      index: index,
-                      caracIcon: Icons.category,
-                    ),
-                    CaracteristicsTile(
-                      caracName: 'Wishlist',
-                      caracValue: 'wish',
-                      plantList: plantList,
-                      index: index,
-                      caracIcon: Icons.height,
-                    ),
-                  ],              
-          ),
-        ],      
+      ),
+      body: Center(
+        child: Text(contents),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _addToFile("tata");
+        },
+        tooltip: 'écrire',
+        child: const Icon(Icons.add),
       ),
     );
-  }
-}
-
-class CaracteristicsTile extends StatelessWidget {
-  const CaracteristicsTile(
-      {required this.caracIcon,
-      required this.caracValue,
-      required this.caracName,
-      required this.plantList,
-      required this.index,
-      super.key});
-  final List<Plant> plantList;
-  final int index;
-  final String caracName;
-  final String caracValue;
-  final IconData caracIcon;
-
-  @override
-  Widget build(BuildContext context) {
-    TextStyle? adaptedSize;
-    if (MediaQuery.of(context).size.width > 600) {
-      adaptedSize = Theme.of(context).textTheme.titleLarge;
-    } else {
-      adaptedSize = Theme.of(context).textTheme.titleSmall;
-    }
-
-    return Card(
-      child: Row(
-        children: [
-          Expanded(child: Icon(caracIcon)),
-          Expanded(
-            flex: 3,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  caracName,
-                  style: DefaultTextStyle.of(context)
-                      .style
-                      .apply(fontSizeFactor: 0.7),
-                ),
-                Text(caracValue, style: adaptedSize)
-              ],
-            ),
-          ),
-        ],
-    ));
   }
 }

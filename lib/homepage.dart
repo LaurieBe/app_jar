@@ -66,16 +66,12 @@ class HomePage extends StatelessWidget {
                     if (model.plantList.isNotEmpty) {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  PlantListPage(plantList: model.plantList)));
+                          MaterialPageRoute(builder: (context) =>PlantListPage(plantList: model.plantList)));
                     } else {
                       log('plantList empty, go populate plantlist');
                       model.populatePlantList().then((value) {Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  PlantListPage(plantList: model.plantList)));});
+                          MaterialPageRoute(builder: (context) =>PlantListPage(plantList: model.plantList)));});
                       
                     }
                   },
@@ -100,6 +96,7 @@ class HomePage extends StatelessWidget {
                             builder: (context) => MyAreaPage(
                                   plantList: model.plantList,
                                   index: 1,
+                                  storage: WritingStorage(),
                                 )));
                   },
                   label: const Text(
