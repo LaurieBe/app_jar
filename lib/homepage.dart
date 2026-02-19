@@ -138,7 +138,7 @@ class HomePage extends StatelessWidget {
                   },
                   label: const Text(
                     'PLANTES',
-                    textScaleFactor: 1.5,
+//                    textScaler: 1.5,
                   ),
                 ),
               ),
@@ -160,7 +160,7 @@ class HomePage extends StatelessWidget {
                   },
                   label: const Text(
                     'ZONES',
-                    textScaleFactor: 1.5,
+//                    textScaleFactor: 1.5,
                   ),
                 ),
               ),
