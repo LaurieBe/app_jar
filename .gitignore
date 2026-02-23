@@ -9,6 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
+/database/scrapper/scraper_plantes.py
 
 # IntelliJ related
 *.iml
