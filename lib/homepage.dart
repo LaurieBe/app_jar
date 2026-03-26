@@ -8,7 +8,6 @@ import 'package:app_jar/plantlistpage.dart';
 import 'package:app_jar/database_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:csv/csv.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -46,6 +45,8 @@ class HomePage extends StatelessWidget {
       }
 
       //Ancienne fonction de récupération du fichier CSV (optionnel, pour compatibilité)
+      // Fonction désactivée - file_picker supprimé pour compatibilité Android
+      /*
       void pickFile() async {
         log('starting to pick file...');
         // opens storage to pick files and the picked file or files
@@ -118,6 +119,7 @@ class HomePage extends StatelessWidget {
           }
         }
       }
+      */
 
       //vérifier si la liste de plante est présente
       if (model.plantList.isNotEmpty) {
