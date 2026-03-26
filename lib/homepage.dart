@@ -5,6 +5,7 @@ import 'package:app_jar/area.dart';
 import 'package:app_jar/model.dart';
 import 'package:app_jar/plant.dart';
 import 'package:app_jar/plantlistpage.dart';
+import 'package:app_jar/database_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
@@ -15,14 +16,36 @@ class HomePage extends StatelessWidget {
   final filePicked = null;
   final fieldsDyn = null;
 
-  //récupérer la liste de plantes à partir du fichier CSV
+  //récupérer la liste de plantes à partir de la base SQLite
 
   @override
   Widget build(BuildContext context) {
     log('Build screen');
 
     return Consumer<AppModel>(builder: (context, model, child) {
-      //fonction de récupération du fichier
+      //fonction de chargement depuis SQLite
+      void loadFromDatabase() async {
+        log('Chargement depuis SQLite...');
+        try {
+          final plants = await DatabaseHelper().loadPlantsFromDB();
+          if (plants.isNotEmpty) {
+            model.plantList = plants;
+            model.notify();
+            log('${plants.length} plantes chargées');
+            const snackBar = SnackBar(
+              content: Text('Plantes chargées depuis la base de données !'),
+            );
+            // ignore: use_build_context_synchronously
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          } else {
+            log('Aucune plante trouvée en base');
+          }
+        } catch (e) {
+          log('Erreur chargement SQLite : $e');
+        }
+      }
+
+      //Ancienne fonction de récupération du fichier CSV (optionnel, pour compatibilité)
       void pickFile() async {
         log('starting to pick file...');
         // opens storage to pick files and the picked file or files
@@ -102,8 +125,8 @@ class HomePage extends StatelessWidget {
         log(model.plantList[0].name);
         log(model.plantList[0].wish ?? 'no wish');
       } else {
-        log('il faut charger la plantlist');
-        pickFile();
+        log('Chargement des plantes depuis la base de données');
+        loadFromDatabase();
       }
 
       return Scaffold(
@@ -112,10 +135,10 @@ class HomePage extends StatelessWidget {
           actions: <Widget>[
             TextButton.icon(
               onPressed: () {
-                pickFile();
+                loadFromDatabase();
               },
-              icon: const Icon(Icons.file_upload),
-              label: const Text('Nouveau Fichier'),
+              icon: const Icon(Icons.refresh),
+              label: const Text('Recharger'),
             ),
           ],
         ),

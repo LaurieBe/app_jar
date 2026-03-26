@@ -2,8 +2,11 @@ import 'package:app_jar/homepage.dart';
 import 'package:app_jar/model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 Future<void> main() async {
+  // Initialiser sqflite pour Windows/Desktop
+  databaseFactory = databaseFactoryFfi;
   runApp(ChangeNotifierProvider(
       create: (context) => AppModel(),
       builder: (context, child) {

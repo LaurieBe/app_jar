@@ -1,16 +1,20 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
         {
             "name": "scraper_plantes",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/database/scrapper/scraper_plantes.py",
+            "program": "${workspaceFolder}/scrapper/scraper_plantes.py",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "app_jar (Flutter Pixel_3a_API_36_extension_level_19_x86_64)",
+            "program": "lib/main.dart",
+            "deviceId": "emulator-5554",
+            "request": "launch",
+            "type": "dart",
+            "console": "debugConsole",
         }
     ]
 }
