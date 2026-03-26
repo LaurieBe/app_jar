@@ -125,7 +125,7 @@ class HomePage extends StatelessWidget {
       if (model.plantList.isNotEmpty) {
         log('Plant list ok ! first row : ');
         log(model.plantList[0].name);
-        log(model.plantList[0].wish ?? 'no wish');
+        log(model.plantList[0].hardiness ?? 'no hardiness');
       } else {
         log('Chargement des plantes depuis la base de données');
         loadFromDatabase();

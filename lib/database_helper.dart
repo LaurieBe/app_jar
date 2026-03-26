@@ -3,6 +3,8 @@ import 'package:path/path.dart';
 import 'dart:io';
 import 'package:app_jar/plant.dart';
 import 'dart:developer';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
   //Crée une instance unique de DatabaseHelper au démarrage, stockée dans _instance
@@ -24,8 +26,10 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     // Chemin de la base de données
-    final dbPath = await getDatabasesPath();
-    final path = join(dbPath, 'plantes.db');
+    final appDir = await getApplicationDocumentsDirectory();
+    final dbDir = Directory(join(appDir.path, 'databases'));
+    await dbDir.create(recursive: true);
+    final path = join(dbDir.path, 'plantes.db');
 
     // Vérifier si la base existe, sinon la copier depuis les assets
     final exists = await databaseExists(path);
@@ -33,9 +37,9 @@ class DatabaseHelper {
       log('Base de données non trouvée, copie depuis assets...');
       try {
         await Directory(dirname(path)).create(recursive: true);
-        // Copier depuis assets (assure-toi que plantes.db est dans pubspec.yaml)
-        final data = await File('assets/plantes.db').readAsBytes();
-        await File(path).writeAsBytes(data);
+        // Copier depuis assets en utilisant rootBundle
+        final data = await rootBundle.load('assets/plantes.db');
+        await File(path).writeAsBytes(data.buffer.asUint8List());
       } catch (e) {
         log('Erreur copie base : $e');
       }

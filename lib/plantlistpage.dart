@@ -25,7 +25,7 @@ class MyPlantList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Plant> filteredPlantList = plantList.where((Plant element) {
-      return element.name.toLowerCase().contains('ab');
+      return element.name.toLowerCase().contains('');
     }).toList();
 
     return ListView.separated(
