@@ -8,13 +8,5 @@
             "program": "${workspaceFolder}/scrapper/scraper_plantes.py",
             "console": "integratedTerminal"
         },
-        {
-            "name": "app_jar (Flutter Pixel_3a_API_36_extension_level_19_x86_64)",
-            "program": "lib/main.dart",
-            "deviceId": "emulator-5554",
-            "request": "launch",
-            "type": "dart",
-            "console": "debugConsole",
-        }
     ]
 }
